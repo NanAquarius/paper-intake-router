@@ -1,0 +1,12 @@
+{
+  "topic": "",
+  "generatedAt": "",
+  "triggeredBy": [],
+  "suggestions": [
+    {
+      "kind": "broaden|narrow|synonyms|canonical|recent|survey|method",
+      "query": "",
+      "reason": ""
+    }
+  ]
+}

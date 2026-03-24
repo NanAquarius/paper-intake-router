@@ -1,0 +1,20 @@
+{
+  "topic": "",
+  "generatedAt": "",
+  "chapters": [
+    {
+      "chapter": "introduction|related-work|methods|experiments|discussion",
+      "writingGoal": "",
+      "prompts": [
+        {
+          "claimType": "problem framing|baseline comparison|method choice|result interpretation|risk discussion",
+          "instruction": "",
+          "recommendedCitations": [],
+          "inlineMarker": "",
+          "useThesePapersFor": [],
+          "avoid": ""
+        }
+      ]
+    }
+  ]
+}

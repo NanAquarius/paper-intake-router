@@ -1,0 +1,17 @@
+{
+  "paperType": "degree",
+  "degreeLevel": "master",
+  "discipline": "computer-science",
+  "courseName": null,
+  "topic": "基于多模态检索增强生成的领域问答系统研究",
+  "style": "GB/T 7714",
+  "targetWords": 25000,
+  "language": "zh",
+  "deliveryGoal": "pdf_with_sources",
+  "layoutReference": {
+    "name": "高校硕士论文样例",
+    "url": null,
+    "path": "uploads/sample-thesis.pdf"
+  },
+  "note": "若提供 layoutReference，router 应优先采用用户样例；若未提供，则按 paper-template-library/layout/defaults/ 中的默认模板解析。"
+}

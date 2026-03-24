@@ -1,0 +1,36 @@
+{
+  "topic": "",
+  "queries": [],
+  "generatedAt": "",
+  "sourcesUsed": [],
+  "selectionPolicy": {
+    "targetCount": 8,
+    "mustIncludeRecentYears": 3,
+    "preferCanonical": true,
+    "preferOpenAccess": true
+  },
+  "papers": [
+    {
+      "rank": 1,
+      "title": "",
+      "authors": [],
+      "year": null,
+      "doi": "",
+      "arxivId": "",
+      "landingPage": "",
+      "pdfUrl": "",
+      "citationCount": null,
+      "source": "",
+      "relevanceNote": "",
+      "evidenceType": "canonical|recent|survey|method|application|counterpoint",
+      "openAccess": null,
+      "needsVerification": false
+    }
+  ],
+  "excluded": [
+    {
+      "title": "",
+      "reason": "duplicate|weak_match|missing_identifier|low_relevance"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "1.0",
+  "templateKind": "layout-template",
+  "templateId": "default-degree-zh-gbt7714",
+  "name": "默认中文学位论文模板（GB/T 7714）",
+  "description": "适用于未提供学校官方模板时的中文学位论文默认版式基线。用于 router 的默认模板选择，不替代学校官方要求。",
+  "authorityLevel": "curated-default",
+  "sourceKind": "thesis-template",
+  "scenarios": {
+    "paperTypes": ["degree"],
+    "degreeLevels": ["bachelor", "master", "doctor"],
+    "languages": ["zh"],
+    "styles": ["GB/T 7714"],
+    "deliveryGoals": ["draft_only", "pdf_with_sources", "reproducible_pdf"]
+  },
+  "citationStyle": "GB/T 7714",
+  "citationRendering": {
+    "style": "GB/T 7714",
+    "profile": "cn-thesis-brackets",
+    "bracketStyle": "square",
+    "zhPunctuationMode": "fullwidth",
+    "apaParenModeZh": "fullwidth"
+  },
+  "toolchainPreference": ["latex-thesis-zh", "quarto", "pandoc"],
+  "pageLayout": {
+    "paperSize": "A4",
+    "columns": 1,
+    "marginPreset": "cn-thesis-default",
+    "pageNumbering": "front-matter-roman-body-arabic"
+  },
+  "frontMatter": {
+    "cover": true,
+    "abstractZh": true,
+    "abstractEn": true,
+    "toc": true,
+    "acknowledgements": true,
+    "appendix": true
+  },
+  "numbering": {
+    "chapters": "第1章",
+    "figures": "图 1-1",
+    "tables": "表 1-1",
+    "equations": "(1-1)"
+  },
+  "selection": {
+    "priority": 300,
+    "defaultFor": ["degree:zh:GB/T 7714", "degree:master:zh:GB/T 7714"]
+  },
+  "artifacts": {
+    "relativePath": "layout/defaults/default-degree-zh-gbt7714.json"
+  },
+  "notes": [
+    "若用户提供学校模板或学院规范，应覆盖本默认模板。",
+    "该模板只提供默认排版基线，不宣称满足任何具体高校送审要求。"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "templateKind": "layout-template",
+  "templateId": "default-course-zh-gbt7714",
+  "name": "默认中文课程论文模板（GB/T 7714）",
+  "description": "适用于中文课程论文或课程作业的默认排版模板。",
+  "authorityLevel": "curated-default",
+  "sourceKind": "course-template",
+  "scenarios": {
+    "paperTypes": ["course"],
+    "degreeLevels": [],
+    "languages": ["zh"],
+    "styles": ["GB/T 7714"],
+    "deliveryGoals": ["draft_only", "pdf_with_sources", "reproducible_pdf"]
+  },
+  "toolchainPreference": ["quarto", "pandoc"],
+  "pageLayout": {
+    "paperSize": "A4",
+    "columns": 1,
+    "marginPreset": "cn-course-default",
+    "pageNumbering": "arabic"
+  },
+  "frontMatter": {
+    "cover": false,
+    "abstractZh": false,
+    "abstractEn": false,
+    "toc": false,
+    "acknowledgements": false,
+    "appendix": true
+  },
+  "numbering": {
+    "chapters": "1",
+    "figures": "图 1",
+    "tables": "表 1",
+    "equations": "(1)"
+  },
+  "selection": {
+    "priority": 250,
+    "defaultFor": ["course:zh:GB/T 7714"]
+  },
+  "artifacts": {
+    "relativePath": "layout/defaults/default-course-zh-gbt7714.json"
+  },
+  "notes": [
+    "适合作为无学校刚性模板时的课程论文默认版式。"
+  ]
+}

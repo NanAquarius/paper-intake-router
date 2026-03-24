@@ -1,0 +1,32 @@
+{
+  "topic": "",
+  "generatedAt": "",
+  "selectionRules": {
+    "targetCoreCount": 8,
+    "minRecentYears": 3,
+    "allowPreprints": true,
+    "mustExplainExclusions": true,
+    "minSurveyCount": 1,
+    "minMethodCount": 1,
+    "minRecentCount": 3,
+    "requireCanonicalWhenAvailable": true,
+    "warnIfAllPreprints": true
+  },
+  "accepted": [
+    {
+      "rank": 1,
+      "title": "",
+      "decision": "keep",
+      "reason": "",
+      "bucket": "canonical|recent|survey|method|application|counterpoint"
+    }
+  ],
+  "rejected": [
+    {
+      "title": "",
+      "decision": "drop",
+      "reason": "duplicate|weak_match|too_old|too_narrow|missing_identifier|low_relevance"
+    }
+  ],
+  "warnings": []
+}

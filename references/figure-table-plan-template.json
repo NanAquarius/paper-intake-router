@@ -1,0 +1,51 @@
+{
+  "topic": "",
+  "generatedAt": "",
+  "layoutTemplate": {
+    "templateId": "",
+    "name": "",
+    "numberingMode": "chapter-based|global-sequential",
+    "figurePattern": "图 1-1 | Figure 1",
+    "tablePattern": "表 1-1 | Table 1"
+  },
+  "chapters": [
+    {
+      "chapter": "绪论|相关工作|方法|实验|讨论|结论",
+      "chapterRole": "introduction|related-work|methods|experiments|discussion|conclusion|other",
+      "items": [
+        {
+          "kind": "figure|table",
+          "requiredLevel": "required|recommended|optional",
+          "label": "图 1-1",
+          "title": "",
+          "purpose": "",
+          "claimType": "problem framing|baseline comparison|method choice|result interpretation|risk discussion",
+          "supportEvidence": [
+            {
+              "title": "",
+              "citationKey": "",
+              "bestArgumentFit": "",
+              "usageNote": "",
+              "sourceUrl": ""
+            }
+          ],
+          "citationHint": {
+            "recommendedCitations": [],
+            "inlineMarker": "",
+            "note": ""
+          },
+          "bodyReference": "如图 1-1 所示",
+          "numberingRule": "chapter-based|global-sequential",
+          "specType": "flowchart|architecture|bar|line|heatmap|results-table|dataset-table|ablation-table|comparison-table",
+          "codegen": {
+            "enabled": true,
+            "language": "python",
+            "scriptPath": "artifacts/codegen/ch01-fig01-example.py",
+            "dataPath": "artifacts/data/ch01-fig01-example.csv",
+            "outputPath": "artifacts/figures/ch01-fig01-example.png"
+          }
+        }
+      ]
+    }
+  ]
+}

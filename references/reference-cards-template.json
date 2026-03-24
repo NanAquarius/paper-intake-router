@@ -1,0 +1,18 @@
+{
+  "topic": "",
+  "generatedAt": "",
+  "cards": [
+    {
+      "title": "",
+      "whyKeep": "",
+      "mainContribution": "",
+      "bestChapterFit": "introduction|related-work|methods|experiments|discussion",
+      "bestArgumentFit": "problem framing|baseline comparison|method choice|result interpretation|risk discussion",
+      "canSupportClaim": [],
+      "riskIfOverused": "",
+      "supportingQuote": "",
+      "citationKey": "",
+      "sourceUrl": ""
+    }
+  ]
+}

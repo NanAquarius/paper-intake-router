@@ -1,0 +1,23 @@
+{
+  "topic": "",
+  "generatedAt": "",
+  "style": "GB/T 7714",
+  "entryCount": 0,
+  "entries": [
+    {
+      "id": "",
+      "title": "",
+      "authors": [],
+      "year": null,
+      "doi": "",
+      "arxivId": "",
+      "url": "",
+      "pdfUrl": "",
+      "citationCount": null,
+      "entryType": "journal-article|conference-paper|preprint|book|report|other",
+      "status": "core|supporting|optional",
+      "notes": "",
+      "formattedCitation": ""
+    }
+  ]
+}

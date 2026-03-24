@@ -1,0 +1,18 @@
+{
+  "topic": "",
+  "generatedAt": "",
+  "style": "GB/T 7714",
+  "chapters": [
+    {
+      "chapter": "introduction|related-work|methods|experiments|discussion",
+      "claims": [
+        {
+          "claimType": "problem framing|baseline comparison|method choice|result interpretation|risk discussion",
+          "recommendedCitations": [],
+          "inlineMarker": "",
+          "note": ""
+        }
+      ]
+    }
+  ]
+}

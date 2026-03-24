@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "templateKind": "layout-template",
+  "templateId": "default-course-en-apa7",
+  "name": "默认英文课程论文模板（APA 7）",
+  "description": "适用于英文课程论文的默认排版模板。",
+  "authorityLevel": "curated-default",
+  "sourceKind": "course-template",
+  "scenarios": {
+    "paperTypes": ["course"],
+    "degreeLevels": [],
+    "languages": ["en"],
+    "styles": ["APA 7"],
+    "deliveryGoals": ["draft_only", "pdf_with_sources", "reproducible_pdf"]
+  },
+  "toolchainPreference": ["quarto", "pandoc"],
+  "pageLayout": {
+    "paperSize": "A4",
+    "columns": 1,
+    "marginPreset": "apa-course-default",
+    "pageNumbering": "arabic"
+  },
+  "frontMatter": {
+    "cover": false,
+    "abstractZh": false,
+    "abstractEn": false,
+    "toc": false,
+    "acknowledgements": false,
+    "appendix": true
+  },
+  "numbering": {
+    "chapters": "1",
+    "figures": "Figure 1",
+    "tables": "Table 1",
+    "equations": "(1)"
+  },
+  "selection": {
+    "priority": 200,
+    "defaultFor": ["course:en:APA 7"]
+  },
+  "artifacts": {
+    "relativePath": "layout/defaults/default-course-en-apa7.json"
+  },
+  "notes": [
+    "适合作为默认英文课程论文基线模板。"
+  ]
+}

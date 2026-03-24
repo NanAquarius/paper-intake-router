@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1.0",
+  "templateKind": "layout-template",
+  "templateId": "default-degree-en-apa7",
+  "name": "默认英文学位论文模板（APA 7）",
+  "description": "适用于英文环境下的默认学位论文排版模板。",
+  "authorityLevel": "curated-default",
+  "sourceKind": "thesis-template",
+  "scenarios": {
+    "paperTypes": ["degree"],
+    "degreeLevels": ["bachelor", "master", "doctor"],
+    "languages": ["en"],
+    "styles": ["APA 7"],
+    "deliveryGoals": ["draft_only", "pdf_with_sources", "reproducible_pdf"]
+  },
+  "citationStyle": "APA 7",
+  "citationRendering": {
+    "style": "APA 7",
+    "profile": "apa-inline",
+    "bracketStyle": "round",
+    "zhPunctuationMode": "halfwidth",
+    "apaParenModeZh": "halfwidth"
+  },
+  "toolchainPreference": ["quarto", "pandoc"],
+  "pageLayout": {
+    "paperSize": "A4",
+    "columns": 1,
+    "marginPreset": "apa-default",
+    "pageNumbering": "arabic"
+  },
+  "frontMatter": {
+    "cover": true,
+    "abstractZh": false,
+    "abstractEn": true,
+    "toc": true,
+    "acknowledgements": true,
+    "appendix": true
+  },
+  "numbering": {
+    "chapters": "1",
+    "figures": "Figure 1",
+    "tables": "Table 1",
+    "equations": "(1)"
+  },
+  "selection": {
+    "priority": 220,
+    "defaultFor": ["degree:en:APA 7"]
+  },
+  "artifacts": {
+    "relativePath": "layout/defaults/default-degree-en-apa7.json"
+  },
+  "notes": [
+    "若用户指定学校模板、journal template 或 style guide，应覆盖本默认模板。"
+  ]
+}

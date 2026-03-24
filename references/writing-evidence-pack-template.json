@@ -1,0 +1,20 @@
+{
+  "topic": "",
+  "generatedAt": "",
+  "chapters": [
+    {
+      "chapter": "introduction|related-work|methods|experiments|discussion",
+      "items": [
+        {
+          "title": "",
+          "citationKey": "",
+          "bestArgumentFit": "problem framing|baseline comparison|method choice|result interpretation|risk discussion",
+          "canSupportClaim": [],
+          "usageNote": "",
+          "riskIfOverused": "",
+          "sourceUrl": ""
+        }
+      ]
+    }
+  ]
+}

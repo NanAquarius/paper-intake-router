@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "paper-template-library/schemas/layout-template.schema.json",
+  "title": "Paper Layout Template",
+  "description": "Structured layout template metadata used by paper-template-library and paper-intake-router to resolve default formatting templates.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "templateKind",
+    "templateId",
+    "name",
+    "description",
+    "authorityLevel",
+    "sourceKind",
+    "scenarios",
+    "selection",
+    "artifacts"
+  ],
+  "properties": {
+    "schemaVersion": { "type": "string" },
+    "templateKind": { "const": "layout-template" },
+    "templateId": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "name": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "authorityLevel": { "type": "string", "enum": ["official", "semi-official", "curated-default", "example"] },
+    "sourceKind": {
+      "type": "string",
+      "enum": ["school-template", "school-guideline", "thesis-template", "course-template", "journal-template", "conference-template", "sample-pdf"]
+    },
+    "scenarios": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paperTypes", "languages", "styles", "deliveryGoals"],
+      "properties": {
+        "paperTypes": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "degreeLevels": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "languages": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "styles": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "deliveryGoals": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    },
+    "citationStyle": { "type": "string" },
+    "citationRendering": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "style": { "type": "string" },
+        "profile": { "type": "string", "enum": ["default", "cn-thesis-brackets", "cn-thesis-superscript", "apa-inline"] },
+        "bracketStyle": { "type": "string", "enum": ["square", "superscript", "round"] },
+        "zhPunctuationMode": { "type": "string", "enum": ["fullwidth", "halfwidth"] },
+        "apaParenModeZh": { "type": "string", "enum": ["fullwidth", "halfwidth"] }
+      }
+    },
+    "toolchainPreference": { "type": "array", "items": { "type": "string" } },
+    "pageLayout": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "paperSize": { "type": "string" },
+        "columns": { "type": "integer", "minimum": 1 },
+        "marginPreset": { "type": "string" },
+        "pageNumbering": { "type": "string" }
+      }
+    },
+    "frontMatter": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "cover": { "type": "boolean" },
+        "abstractZh": { "type": "boolean" },
+        "abstractEn": { "type": "boolean" },
+        "toc": { "type": "boolean" },
+        "acknowledgements": { "type": "boolean" },
+        "appendix": { "type": "boolean" }
+      }
+    },
+    "numbering": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "chapters": { "type": "string" },
+        "figures": { "type": "string" },
+        "tables": { "type": "string" },
+        "equations": { "type": "string" }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["priority"],
+      "properties": {
+        "priority": { "type": "integer", "minimum": 0, "maximum": 1000 },
+        "defaultFor": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relativePath"],
+      "properties": {
+        "relativePath": { "type": "string" },
+        "samplePdf": { "type": "string" },
+        "sourceUrl": { "type": "string" }
+      }
+    },
+    "notes": { "type": "array", "items": { "type": "string" } }
+  }
+}
