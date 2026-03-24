@@ -142,18 +142,41 @@ pip install -r requirements-minimal.txt
 - 引用渲染
 - smoke test
 
-但如果你要启用**文献检索、证据包构建、外部学术搜索**，就很可能依赖你自己的上游工具或 API：
+但如果你要启用完整论文工作流里的以下环节，通常**建议配置外部 API / 上游服务**：
+
+- 文献检索
+- reference shortlist 生成
+- evidence pack 构建
+- 外部学术元数据拉取
+- 大规模文档解析 / 检索增强
+
+### 建议配置的外部服务
 
 例如：
 
-- OpenAlex / Semantic Scholar / 论文搜索类 MCP
-- Tavily / Exa / 其他搜索服务
-- 外部 PDF / 文档解析服务
+- **Semantic Scholar API**
+  - 官方入口：<https://www.semanticscholar.org/product/api>
+  - 教程 / 认证说明：<https://www.semanticscholar.org/product/api/tutorial>
+  - API 文档：<https://api.semanticscholar.org/api-docs/>
+  - 如果你的工作流依赖 Semantic Scholar 做检索或元数据增强，建议提醒使用者先按官方文档申请并配置自己的 API 访问能力
 
-所以最稳的做法是：
+- **OpenAlex**
+  - 适合论文元数据和学术图谱查询
+  - 某些用法不一定需要私有 key，但仍然应在部署说明中写清楚你依赖的是哪套后端
 
-- 在你自己的部署文档里明确写清楚用了哪套搜索后端
-- 在需要外部凭据的步骤里，明确提醒使用者先完成配置
+- **Tavily / Exa / 其他搜索服务**
+  - 当工作流依赖外部网页搜索、检索增强或证据补全时，建议配置
+
+### 对使用者和维护者的建议
+
+如果你的部署打开了文献检索或 evidence-building 阶段，请在文档里明确写清楚：
+
+- 使用了哪个提供方
+- 是否要求 API Key
+- Key 应该去哪里申请
+- 哪些工作流步骤依赖这个外部凭据
+
+也就是说：**本地核心链不需要 API Key，但生产化的检索 / 证据工作流通常需要。**
 
 ## 快速开始
 

@@ -141,15 +141,41 @@ You can run the local pipeline pieces such as:
 
 without configuring external services.
 
-However, **literature-search and evidence-building stages may require upstream tools or API keys**, depending on how you wire the project into your own agent stack.
+However, the following parts of a full paper workflow are **recommended to be backed by external APIs or upstream services**:
 
-Typical examples:
+- literature search
+- reference shortlist generation
+- evidence-pack construction
+- external academic metadata retrieval
+- large-scale document parsing / search augmentation
 
-- OpenAlex / Semantic Scholar / Research-paper MCPs
-- Tavily / Exa / other search providers
-- Any external academic search or document parsing service
+### Suggested external providers
 
-**Recommendation:** document clearly for your own deployment which search backend you use, and remind end users when a workflow step depends on external credentials rather than local scripts.
+Examples of upstream services you may want to configure in your own deployment:
+
+- **Semantic Scholar API**
+  - official overview: <https://www.semanticscholar.org/product/api>
+  - tutorial / authentication notes: <https://www.semanticscholar.org/product/api/tutorial>
+  - API docs: <https://api.semanticscholar.org/api-docs/>
+  - if your workflow depends on Semantic Scholar-backed retrieval, users should obtain and configure their own API-enabled access according to the official docs
+
+- **OpenAlex**
+  - useful for paper metadata and academic graph lookups
+  - depending on your usage pattern, you may not need a private key, but you should still document the backend you rely on
+
+- **Tavily / Exa / other search providers**
+  - recommended when your workflow depends on external web search, retrieval augmentation, or evidence enrichment
+
+### Recommendation for users and maintainers
+
+If a deployment enables literature-search or evidence-building stages through external providers, the README or deployment guide should explicitly state:
+
+- which provider is used
+- whether an API key is required
+- where the user should obtain that key
+- which workflow steps depend on that external credential
+
+In other words: **the local core does not require an API key, but production-style retrieval workflows often do.**
 
 ## Quick start
 
