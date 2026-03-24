@@ -9,7 +9,13 @@ It is optimized for paper-production workflows where text generation alone is no
 
 It helps agents manage the operational layer around papers:
 
-**Compatibility note**
+- normalize intake into structured task sheets
+- organize references, evidence packs, and citation plans
+- plan figures/tables before drafting
+- keep figure numbering and prose references consistent
+- render citations through a unified, template-aware pipeline
+
+## Compatibility note
 
 This repository is built first for the **OpenClaw** ecosystem.
 
@@ -21,12 +27,6 @@ It may still be reusable in other agent / CLI environments such as **Claude Code
 - tool wiring and invocation glue
 
 If you are not using OpenClaw, treat this repository as a portable workflow core that may require adaptation rather than a plug-and-play package.
-
-- normalize intake into structured task sheets
-- organize references, evidence packs, and citation plans
-- plan figures/tables before drafting
-- keep figure numbering and prose references consistent
-- render citations through a unified, template-aware pipeline
 
 ## Highlights
 
