@@ -1,1 +1,160 @@
-[English](./README.md) | [简体中文](./README.zh-CN.md)\n\n# paper-intake-router\n\n**An agent-native paper workflow engine for intake, evidence organization, figure/table planning, citation alignment, and template-aware final rendering.**\n\n`paper-intake-router` is a workflow core for academic writing agents.\nIt helps turn a paper request into a structured pipeline: normalize the intake, organize evidence, plan figures/tables, align citations, and render drafts toward deliverable output.\n\nIt is especially useful when you want an agent to do more than “write paragraphs” — you want it to manage the *workflow* around a paper.\n\n## What problem this project solves\n\nMost AI writing tools are good at generating text, but weak at the operational layer around academic writing:\n\n- collecting and normalizing paper requirements\n- deciding what information is still missing\n- organizing evidence and citations by chapter / claim type\n- planning figures and tables before the draft is written\n- keeping figure numbering, references, and citation rendering consistent\n- adapting final output to different citation and layout profiles\n\nThis project focuses on that missing layer.\n\n## Core capabilities\n\n### 1. Intake → task sheet\n\n- normalize raw paper requests into structured task sheets\n- infer defaults for paper type, language, style, and target length\n- resolve default layout templates when no official template is provided\n\n### 2. Evidence and citation pipeline\n\n- build reference shortlist\n- screen and retry search queries\n- assemble reference pack\n- generate writing evidence pack\n- generate citation plan by chapter and claim type\n\n### 3. Figure / table workflow\n\n- generate figure-table plans before drafting\n- assign numbering rules from template defaults\n- scaffold code, placeholder data, and output paths\n- validate figure/table references against the plan\n- autofix common reference and phrasing issues\n\n### 4. Unified citation layer\n\n- support normal prose and figure explanation sentences through the same citation rendering chain\n- support `support-note`, `inline-marker`, and `internal-anchor` citation modes\n- render final citations into GB/T 7714 or APA-style output\n- apply template-aware citation rendering profiles\n\n### 5. Template-aware final rendering\n\n- separate layout template selection from writing logic\n- carry citation rendering preferences through the workflow\n- support profile-aware final prose cleanup for mixed Chinese / APA contexts\n\n## Project structure\n\n```text\npaper-intake-router/\n├── SKILL.md\n├── scripts/\n├── references/\n├── paper-template-library/\n├── examples/\n├── README.md\n├── README.zh-CN.md\n└── LICENSE\n```\n\n## Minimal workflow\n\n```bash\npython3 scripts/build_task_sheet.py \\\n  --input examples/intake.json \\\n  --out-json /tmp/task.json\n\npython3 scripts/build_figure_table_plan.py \\\n  --task /tmp/task.json \\\n  --out-json /tmp/figure-plan.json\n\npython3 scripts/autofix_figure_table_refs.py \\\n  --plan /tmp/figure-plan.json \\\n  --draft examples/draft.md \\\n  --citation-mode internal-anchor \\\n  --out /tmp/fixed.md\n\npython3 scripts/render_final_citations.py \\\n  --draft /tmp/fixed.md \\\n  --reference-pack examples/reference-pack.json \\\n  --style 'GB/T 7714' \\\n  --out /tmp/final.md\n```\n\n## Example use cases\n\n- building a thesis workflow agent that needs more than free-form text generation\n- managing figure/table numbering and explanation sentences consistently\n- keeping citations aligned across normal prose and figure explanation text\n- generating structured intermediate artifacts instead of opaque black-box output\n\n## What this project is\n\nThis project is best thought of as a:\n\n- **paper workflow engine**\n- **formatting and citation stabilizer**\n- **draft-to-deliverable orchestration layer for agents**\n\n## What this project is not\n\nThis project does **not** guarantee:\n\n- school-specific compliance without the real template or official guideline\n- real experimental validity\n- final submission readiness without human review\n- automatic invention of trustworthy data, results, or references\n\nSee `references/capability-boundaries.md` for the current operational boundary set.\n\n## Why it may be interesting\n\nMany agent projects stop at “generate text.”\n\nThis one pushes further into the operational side of academic work:\n\n- evidence organization\n- figure/table workflow\n- citation normalization\n- template-aware rendering\n- validation and final gates\n\nThat makes it useful not only as a writing helper, but as a reusable paper-production pipeline core.\n\n## License\n\nMIT\n
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
+# paper-intake-router
+
+> Agent-native paper workflow engine for intake, evidence organization, figure/table planning, citation alignment, and template-aware final rendering.
+
+`paper-intake-router` is a workflow core for academic writing agents.
+It is designed for paper-production workflows where text generation alone is not enough.
+
+It helps agents manage the operational layer around papers:
+
+- normalize intake into structured task sheets
+- organize references, evidence packs, and citation plans
+- plan figures/tables before drafting
+- keep figure numbering and prose references consistent
+- render citations through a unified, template-aware pipeline
+
+## Highlights
+
+- **Intake → task sheet** normalization
+- **Reference shortlist / screening / retry / reference pack** workflow
+- **Writing evidence pack + citation plan** generation
+- **Figure/table planning, validation, and autofix**
+- **Unified citation layer** for both normal prose and figure explanation sentences
+- **Template-aware final citation rendering** for GB/T 7714 and APA-style outputs
+
+## Who this is for
+
+This project is useful if you are building:
+
+- academic writing agents
+- thesis workflow assistants
+- paper-production pipelines
+- citation / figure automation systems
+
+## Repository layout
+
+```text
+paper-intake-router/
+├── SKILL.md
+├── scripts/
+├── references/
+├── paper-template-library/
+├── examples/
+├── README.md
+├── README.zh-CN.md
+└── LICENSE
+```
+
+## Quick start
+
+### 1. Build a task sheet
+
+```bash
+python3 scripts/build_task_sheet.py \
+  --input examples/intake.json \
+  --out-json /tmp/task.json
+```
+
+### 2. Build a figure/table plan
+
+```bash
+python3 scripts/build_figure_table_plan.py \
+  --task /tmp/task.json \
+  --out-json /tmp/figure-plan.json
+```
+
+### 3. Autofix figure references into internal citation anchors
+
+```bash
+python3 scripts/autofix_figure_table_refs.py \
+  --plan /tmp/figure-plan.json \
+  --draft examples/draft.md \
+  --citation-mode internal-anchor \
+  --out /tmp/fixed.md
+```
+
+### 4. Render final citations
+
+```bash
+python3 scripts/render_final_citations.py \
+  --draft /tmp/fixed.md \
+  --reference-pack examples/reference-pack.json \
+  --style 'GB/T 7714' \
+  --out /tmp/final.md
+```
+
+## Core concepts
+
+### Task sheet
+
+A normalized task object that captures:
+
+- paper type
+- degree level
+- topic
+- style
+- target length
+- layout template selection
+
+### Figure/table plan
+
+A structured artifact that decides:
+
+- what figures/tables should exist
+- numbering rules
+- code/data/output paths
+- claim type
+- support evidence and citation hints
+
+### Unified citation layer
+
+This project supports three citation output modes:
+
+- `support-note`
+- `inline-marker`
+- `internal-anchor`
+
+The most important one is `internal-anchor`, because it lets:
+
+- figure explanation sentences
+- normal prose
+- method / experiment conclusion sentences
+
+all pass through the same final citation rendering chain.
+
+## What this project is
+
+Think of it as a:
+
+- **paper workflow engine**
+- **formatting and citation stabilizer**
+- **draft-to-deliverable orchestration layer for agents**
+
+## What this project is not
+
+This project does **not** guarantee:
+
+- school-specific compliance without the real official template
+- real experimental validity
+- submission-readiness without human review
+- trustworthy data/result invention
+
+See `references/capability-boundaries.md` for current operational boundaries.
+
+## Examples
+
+Minimal sample inputs are included in:
+
+- `examples/intake.json`
+- `examples/draft.md`
+- `examples/reference-pack.json`
+
+For a lightweight end-to-end validation, see:
+
+- `scripts/smoke_test_pipeline.py`
+
+## License
+
+MIT

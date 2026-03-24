@@ -1,1 +1,162 @@
-[English](./README.md) | 简体中文\n\n# paper-intake-router\n\n**一个面向智能代理的论文工作流引擎，覆盖 intake、证据组织、图表规划、引用对齐与模板感知终稿渲染。**\n\n`paper-intake-router` 不是单纯的“论文文本生成器”，而是一个更偏工作流层的内核。\n它的目标是把论文任务从一句模糊需求，推进成一条结构化、可检查、可渲染的生产流程：\n\n- intake 归一化\n- 证据与引用组织\n- 图表规划与编号\n- 图表说明句和普通正文的统一引用链\n- 模板感知的终稿渲染\n\n如果你想让智能代理处理的不只是“写几段字”，而是**管理整条论文工作流**，这个项目就是为此设计的。\n\n## 这个项目解决什么问题\n\n很多 AI 写作工具擅长生成段落，但在论文这种严肃任务里，真正容易失控的往往不是文本本身，而是周边工作流：\n\n- 用户需求怎么 intake\n- 缺什么信息怎么补问\n- 文献怎么 shortlist / screening / retry\n- 图表怎么在正文前规划好，而不是写完再补\n- 图表编号、正文引用、参考文献格式怎么保持一致\n- 不同模板、不同引用风格怎么稳定落到终稿渲染\n\n这个项目重点补的，就是这层“论文工作流操作系统”。\n\n## 核心能力\n\n### 1. Intake → task sheet\n\n- 把原始论文需求归一化成结构化任务单\n- 为论文类型、语言、引用风格、目标字数补默认值\n- 在没有官方模板时，选择默认版式模板\n\n### 2. 证据与引用管线\n\n- reference shortlist\n- screening 与 retry\n- reference pack\n- writing evidence pack\n- citation plan（按章节 / claim type）\n\n### 3. 图表工作流\n\n- 在正文写作前先生成 figure-table plan\n- 从模板推导编号规则\n- 生成代码脚手架、占位数据和产物路径\n- 校验图表引用与编号一致性\n- 自动修正常见图表说明句与引用问题\n\n### 4. 统一引用层\n\n- 让普通正文段和图表说明句走同一套 citation rendering chain\n- 支持三种模式：\n  - `support-note`\n  - `inline-marker`\n  - `internal-anchor`\n- 支持 GB/T 7714 与 APA 风格渲染\n- 支持模板感知的 citation rendering profile\n\n### 5. 模板感知终稿渲染\n\n- 将版式模板选择与写作逻辑分离\n- 在工作流中携带 citation rendering 偏好\n- 支持中文 / APA 混排场景下的终稿引用 polish\n\n## 项目结构\n\n```text\npaper-intake-router/\n├── SKILL.md\n├── scripts/\n├── references/\n├── paper-template-library/\n├── examples/\n├── README.md\n├── README.zh-CN.md\n└── LICENSE\n```\n\n## 最小工作流示例\n\n```bash\npython3 scripts/build_task_sheet.py \\\n  --input examples/intake.json \\\n  --out-json /tmp/task.json\n\npython3 scripts/build_figure_table_plan.py \\\n  --task /tmp/task.json \\\n  --out-json /tmp/figure-plan.json\n\npython3 scripts/autofix_figure_table_refs.py \\\n  --plan /tmp/figure-plan.json \\\n  --draft examples/draft.md \\\n  --citation-mode internal-anchor \\\n  --out /tmp/fixed.md\n\npython3 scripts/render_final_citations.py \\\n  --draft /tmp/fixed.md \\\n  --reference-pack examples/reference-pack.json \\\n  --style 'GB/T 7714' \\\n  --out /tmp/final.md\n```\n\n## 适合的使用场景\n\n- 需要比“自由生成段落”更强的论文工作流 agent\n- 想稳定管理图表编号、说明句、引用对齐\n- 想把论文中间产物做成结构化文件，而不是黑盒输出\n- 想把图表说明句、普通正文段、最终引用渲染统一到一条链上\n\n## 这个项目是什么\n\n更准确地说，它是：\n\n- **论文工作流引擎**\n- **格式与引用稳定器**\n- **面向智能代理的 draft-to-deliverable orchestration layer**\n\n## 这个项目不是什么\n\n它**不保证**：\n\n- 在没有真实模板原件时完全符合学校/期刊规范\n- 实验结论的真实性\n- 无需人工复核即可直接投稿/送审\n- 自动发明可信数据、结果或文献\n\n当前能力边界见：`references/capability-boundaries.md`\n\n## 为什么它可能有意思\n\n很多 agent 项目停留在“会生成文本”。\n\n`paper-intake-router` 更往前走了一步：它试图把论文自动化中最容易乱掉的那一层工作流，也做成稳定、结构化、可检查的系统。\n\n重点包括：\n\n- evidence organization\n- figure/table workflow\n- citation normalization\n- template-aware rendering\n- validation and final gates\n\n所以它的价值不只是“写”，而是**把论文生产流程本身工程化**。\n\n## License\n\nMIT\n
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
+# paper-intake-router
+
+> 一个面向智能代理的论文工作流引擎，覆盖 intake、证据组织、图表规划、引用对齐与模板感知终稿渲染。
+
+`paper-intake-router` 不是单纯的“论文文本生成器”，而是一个更偏工作流层的内核。
+它适合那些不满足于“生成几段文字”，而希望代理真正管理整条论文生产流程的场景。
+
+它重点处理这些问题：
+
+- 把原始论文需求归一化成结构化任务单
+- 组织文献、证据包和引用计划
+- 在写正文前先规划图表
+- 保持图表编号、正文引用和引用渲染的一致性
+- 在不同模板和风格下稳定输出终稿引用格式
+
+## 核心亮点
+
+- **Intake → task sheet** 归一化
+- **reference shortlist / screening / retry / reference pack** 工作流
+- **writing evidence pack + citation plan** 生成
+- **图表规划、校验与自动修正**
+- **普通正文段与图表说明句统一走 citation layer**
+- **模板感知的终稿引用渲染**
+
+## 适合谁用
+
+这个项目适合：
+
+- academic writing agents
+- thesis workflow assistants
+- paper-production pipelines
+- citation / figure automation systems
+
+## 仓库结构
+
+```text
+paper-intake-router/
+├── SKILL.md
+├── scripts/
+├── references/
+├── paper-template-library/
+├── examples/
+├── README.md
+├── README.zh-CN.md
+└── LICENSE
+```
+
+## 快速开始
+
+### 1）生成 task sheet
+
+```bash
+python3 scripts/build_task_sheet.py \
+  --input examples/intake.json \
+  --out-json /tmp/task.json
+```
+
+### 2）生成图表规划
+
+```bash
+python3 scripts/build_figure_table_plan.py \
+  --task /tmp/task.json \
+  --out-json /tmp/figure-plan.json
+```
+
+### 3）把图表说明句修成 internal anchor 模式
+
+```bash
+python3 scripts/autofix_figure_table_refs.py \
+  --plan /tmp/figure-plan.json \
+  --draft examples/draft.md \
+  --citation-mode internal-anchor \
+  --out /tmp/fixed.md
+```
+
+### 4）渲染终稿引用
+
+```bash
+python3 scripts/render_final_citations.py \
+  --draft /tmp/fixed.md \
+  --reference-pack examples/reference-pack.json \
+  --style 'GB/T 7714' \
+  --out /tmp/final.md
+```
+
+## 核心概念
+
+### Task sheet
+
+用于统一描述论文任务，包括：
+
+- 论文类型
+- 学位层级
+- 主题
+- 引用风格
+- 目标字数
+- 版式模板选择
+
+### Figure/table plan
+
+用于提前决定：
+
+- 需要哪些图表
+- 编号规则
+- 代码 / 数据 / 输出路径
+- claim type
+- 支撑证据与 citation hint
+
+### 统一引用层
+
+项目支持三种引用输出模式：
+
+- `support-note`
+- `inline-marker`
+- `internal-anchor`
+
+其中最关键的是 `internal-anchor`。因为它能让：
+
+- 图表说明句
+- 普通正文段
+- 方法 / 实验结论句
+
+最终都走同一套 citation rendering chain。
+
+## 这个项目是什么
+
+更准确地说，它是：
+
+- **论文工作流引擎**
+- **格式与引用稳定器**
+- **面向智能代理的 draft-to-deliverable orchestration layer**
+
+## 这个项目不是什么
+
+它**不保证**：
+
+- 在没有官方模板原件时完全符合学校 / 期刊规范
+- 实验结果的真实性
+- 无需人工复核即可直接投稿 / 送审
+- 自动发明可信数据、结果或文献
+
+当前能力边界见：
+
+- `references/capability-boundaries.md`
+
+## 示例
+
+仓库里附带了最小示例：
+
+- `examples/intake.json`
+- `examples/draft.md`
+- `examples/reference-pack.json`
+
+如果你想快速验活，可以直接看：
+
+- `scripts/smoke_test_pipeline.py`
+
+## License
+
+MIT

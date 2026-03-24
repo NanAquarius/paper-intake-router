@@ -1,0 +1,10 @@
+{
+  "paperType": "degree",
+  "degreeLevel": "master",
+  "discipline": "computer-science",
+  "topic": "基于多模态检索增强生成的领域问答系统研究",
+  "style": "GB/T 7714",
+  "targetWords": 25000,
+  "language": "zh",
+  "deliveryGoal": "pdf_with_sources"
+}
