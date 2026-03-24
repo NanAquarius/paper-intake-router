@@ -52,7 +52,7 @@ paper-intake-router/
 ### 基础环境
 
 - Python 3.10+
-- 推荐 Linux / macOS / WSL 这类类 Unix 环境
+- Linux / macOS / WSL 或 Windows PowerShell
 
 ### 可选依赖
 
@@ -62,6 +62,57 @@ paper-intake-router/
 - `pandoc`
 - `xelatex` 或其它 LaTeX 工具链
 - `matplotlib`（用于本地图表脚手架渲染）
+
+## 基础环境准备
+
+### Linux / macOS / WSL
+
+```bash
+git clone https://github.com/NanAquarius/paper-intake-router.git
+cd paper-intake-router
+chmod +x scripts/install.sh
+./scripts/install.sh
+source .venv/bin/activate
+```
+
+### Windows PowerShell
+
+```powershell
+git clone https://github.com/NanAquarius/paper-intake-router.git
+cd paper-intake-router
+powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
+.\.venv\Scripts\Activate.ps1
+```
+
+### 手动安装（跨平台）
+
+如果你不想用安装脚本，也可以手动安装：
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-minimal.txt
+```
+
+Windows 下对应：
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-minimal.txt
+```
+
+### 安装脚本会做什么
+
+安装脚本默认只做最小安装：
+
+- 创建本地虚拟环境
+- 升级 `pip`
+- 安装 `requirements-minimal.txt`
+
+这样可以保证本地的规划 / 校验 / 引用渲染链可以直接跑起来。
+
+如果你还需要更完整的 PDF / 文档渲染能力，请额外安装 `quarto`、`pandoc`、LaTeX 工具链等可选依赖。
 
 ## API Key / 外部服务说明
 

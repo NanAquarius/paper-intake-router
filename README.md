@@ -52,7 +52,7 @@ paper-intake-router/
 ### Runtime
 
 - Python 3.10+
-- A Unix-like shell environment (Linux / macOS / WSL recommended)
+- A Unix-like shell environment (Linux / macOS / WSL recommended) or Windows PowerShell
 
 ### Optional dependencies
 
@@ -62,6 +62,57 @@ Depending on which parts of the workflow you use, you may also want:
 - `pandoc`
 - `xelatex` or an equivalent LaTeX toolchain
 - `matplotlib` for figure code scaffolding that renders local charts
+
+## Environment setup
+
+### Linux / macOS / WSL
+
+```bash
+git clone https://github.com/NanAquarius/paper-intake-router.git
+cd paper-intake-router
+chmod +x scripts/install.sh
+./scripts/install.sh
+source .venv/bin/activate
+```
+
+### Windows PowerShell
+
+```powershell
+git clone https://github.com/NanAquarius/paper-intake-router.git
+cd paper-intake-router
+powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
+.\.venv\Scripts\Activate.ps1
+```
+
+### Manual setup (cross-platform)
+
+If you prefer manual setup instead of the helper scripts:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-minimal.txt
+```
+
+On Windows:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements-minimal.txt
+```
+
+### What the install scripts do
+
+The install helpers:
+
+- create a local virtual environment
+- upgrade `pip`
+- install `requirements-minimal.txt`
+
+They intentionally keep installation minimal so the local planning / validation / citation workflow works out of the box.
+
+If you want richer rendering or broader document workflows, install optional tools such as `quarto`, `pandoc`, or a LaTeX engine separately.
 
 ## API keys and external services
 
