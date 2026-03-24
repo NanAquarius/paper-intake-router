@@ -2,7 +2,7 @@
 
 # paper-intake-router
 
-> An OpenClaw-oriented paper workflow Skill / engine for intake, evidence organization, figure/table planning, citation alignment, and template-aware final rendering.
+> OpenClaw-first workflow core for turning paper requests into structured, evidence-aware, figure-aware, citation-consistent deliverables.
 
 `paper-intake-router` is primarily designed as an **OpenClaw Skill** and workflow core for academic writing agents.
 It is optimized for paper-production workflows where text generation alone is not enough.
