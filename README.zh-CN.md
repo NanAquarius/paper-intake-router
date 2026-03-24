@@ -355,6 +355,7 @@ python3 scripts/render_final_citations.py \
 - `examples/intake.json`
 - `examples/draft.md`
 - `examples/reference-pack.json`
+- `examples/layout-samples/README.md`（说明如何自行构建本地排版样张库）
 
 如果你想快速验活，可以直接运行：
 
@@ -371,6 +372,8 @@ python3 scripts/render_final_citations.py \
 ## 这个项目不是什么
 
 它**不保证**：
+
+- 默认就附带可再分发的学位论文 / 期刊 / 会议 PDF 排版样张
 
 - 在没有官方模板原件时完全符合学校 / 期刊规范
 - 实验结果的真实性

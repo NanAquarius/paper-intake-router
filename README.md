@@ -355,6 +355,7 @@ Minimal sample inputs are included in:
 - `examples/intake.json`
 - `examples/draft.md`
 - `examples/reference-pack.json`
+- `examples/layout-samples/README.md` (guidance for building your own local layout sample library)
 
 For a lightweight end-to-end validation, see:
 
@@ -371,6 +372,8 @@ Think of it as a:
 ## What this project is not
 
 This project does **not** guarantee:
+
+- bundled redistributable thesis / journal / conference PDF layout samples by default
 
 - school-specific compliance without the real template or official guideline
 - real experimental validity
