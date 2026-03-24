@@ -2,12 +2,25 @@
 
 # paper-intake-router
 
-> Agent-native paper workflow engine for intake, evidence organization, figure/table planning, citation alignment, and template-aware final rendering.
+> An OpenClaw-oriented paper workflow Skill / engine for intake, evidence organization, figure/table planning, citation alignment, and template-aware final rendering.
 
-`paper-intake-router` is a workflow core for academic writing agents.
-It is designed for paper-production workflows where text generation alone is not enough.
+`paper-intake-router` is primarily designed as an **OpenClaw Skill** and workflow core for academic writing agents.
+It is optimized for paper-production workflows where text generation alone is not enough.
 
 It helps agents manage the operational layer around papers:
+
+**Compatibility note**
+
+This repository is built first for the **OpenClaw** ecosystem.
+
+It may still be reusable in other agent / CLI environments such as **Claude Code**, **OpenCode**, or similar coding-agent runtimes, but it is **not guaranteed to work out of the box** there. In those environments, you should expect to adjust:
+
+- runtime assumptions
+- file paths and workspace conventions
+- upstream search / evidence backends
+- tool wiring and invocation glue
+
+If you are not using OpenClaw, treat this repository as a portable workflow core that may require adaptation rather than a plug-and-play package.
 
 - normalize intake into structured task sheets
 - organize references, evidence packs, and citation plans
