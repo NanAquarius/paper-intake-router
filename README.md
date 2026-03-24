@@ -22,7 +22,7 @@ It helps agents manage the operational layer around papers:
 - **Writing evidence pack + citation plan** generation
 - **Figure/table planning, validation, and autofix**
 - **Unified citation layer** for both normal prose and figure explanation sentences
-- **Template-aware final citation rendering** for GB/T 7714 and APA-style outputs
+- **Template-aware final citation rendering**
 
 ## Who this is for
 
@@ -46,6 +46,46 @@ paper-intake-router/
 ├── README.zh-CN.md
 └── LICENSE
 ```
+
+## Requirements
+
+### Runtime
+
+- Python 3.10+
+- A Unix-like shell environment (Linux / macOS / WSL recommended)
+
+### Optional dependencies
+
+Depending on which parts of the workflow you use, you may also want:
+
+- `quarto`
+- `pandoc`
+- `xelatex` or an equivalent LaTeX toolchain
+- `matplotlib` for figure code scaffolding that renders local charts
+
+## API keys and external services
+
+The **core local workflow** in this repository does **not** require an API key.
+
+You can run the local pipeline pieces such as:
+
+- task sheet generation
+- figure/table planning
+- figure/table autofix
+- citation rendering
+- smoke tests
+
+without configuring external services.
+
+However, **literature-search and evidence-building stages may require upstream tools or API keys**, depending on how you wire the project into your own agent stack.
+
+Typical examples:
+
+- OpenAlex / Semantic Scholar / Research-paper MCPs
+- Tavily / Exa / other search providers
+- Any external academic search or document parsing service
+
+**Recommendation:** document clearly for your own deployment which search backend you use, and remind end users when a workflow step depends on external credentials rather than local scripts.
 
 ## Quick start
 
@@ -85,44 +125,150 @@ python3 scripts/render_final_citations.py \
   --out /tmp/final.md
 ```
 
-## Core concepts
+## More detailed usage
 
-### Task sheet
+### A. Intake normalization
 
-A normalized task object that captures:
+Use `build_task_sheet.py` when you already have a normalized or semi-normalized intake JSON.
+
+Example:
+
+```bash
+python3 scripts/build_task_sheet.py \
+  --input examples/intake.json \
+  --out-json /tmp/task.json \
+  --out-md /tmp/task.md
+```
+
+This stage decides:
 
 - paper type
 - degree level
 - topic
 - style
 - target length
-- layout template selection
+- selected layout template
 
-### Figure/table plan
+### B. Figure / table planning
 
-A structured artifact that decides:
+Use `build_figure_table_plan.py` to create a structured plan before drafting.
 
-- what figures/tables should exist
-- numbering rules
-- code/data/output paths
-- claim type
-- support evidence and citation hints
+```bash
+python3 scripts/build_figure_table_plan.py \
+  --task /tmp/task.json \
+  --out-json /tmp/figure-plan.json \
+  --out-md /tmp/figure-plan.md
+```
 
-### Unified citation layer
+Optional inputs:
 
-This project supports three citation output modes:
+- `--evidence-pack`
+- `--citation-plan`
+
+When provided, the plan becomes evidence-aware and citation-aware.
+
+### C. Figure/table code scaffolding
+
+```bash
+python3 scripts/generate_figure_table_codegen.py \
+  --plan /tmp/figure-plan.json \
+  --base-dir /tmp/paper-artifacts
+```
+
+This can create:
+
+- code stubs
+- placeholder CSV data
+- figure/table output paths
+
+### D. Figure/table validation
+
+```bash
+python3 scripts/validate_figure_table_refs.py \
+  --plan /tmp/figure-plan.json \
+  --draft /tmp/draft.md \
+  --out-json /tmp/figure-validation.json \
+  --out-md /tmp/figure-validation.md
+```
+
+This checks:
+
+- missing required figure/table references
+- unexpected figure/table references in prose
+- numbering issues
+- duplicate labels in the plan
+
+### E. Autofix modes
+
+`autofix_figure_table_refs.py` supports three citation modes:
 
 - `support-note`
+  - draft-oriented
+  - adds prose like “can be further supported by …”
+
 - `inline-marker`
+  - transitional mode
+  - writes visible inline markers such as `[2]`
+
 - `internal-anchor`
+  - best mode for full automation
+  - writes internal anchors such as `[CITE:baseline comparison|lee2024benchmark]`
+  - lets figure explanation text and normal prose share the same final citation rendering pipeline
 
-The most important one is `internal-anchor`, because it lets:
+Example:
 
-- figure explanation sentences
-- normal prose
-- method / experiment conclusion sentences
+```bash
+python3 scripts/autofix_figure_table_refs.py \
+  --plan /tmp/figure-plan.json \
+  --draft /tmp/draft.md \
+  --citation-mode internal-anchor \
+  --out /tmp/fixed.md \
+  --report /tmp/autofix-report.json
+```
 
-all pass through the same final citation rendering chain.
+### F. Final citation rendering
+
+```bash
+python3 scripts/render_final_citations.py \
+  --draft /tmp/fixed.md \
+  --reference-pack examples/reference-pack.json \
+  --style 'APA' \
+  --out /tmp/final.md
+```
+
+Optional inputs:
+
+- `--citation-plan`
+- `--citation-profile-json`
+
+Use `citation-profile-json` when your layout template has a rendering profile (for example, Chinese thesis bracket conventions vs APA-style inline author-year formatting).
+
+## Typical artifacts produced by the workflow
+
+Depending on which path you run, the workflow may produce:
+
+- `task.json` / `task.md`
+- `references-shortlist.json` / `.md`
+- `reference-screening.json` / `.md`
+- `reference-pack.json` / `.md`
+- `writing-evidence-pack.json` / `.md`
+- `citation-plan.json` / `.md`
+- `figure-table-plan.json` / `.md`
+- generated code / CSV / figures / tables
+- fixed draft files
+- final rendered draft files
+
+## Examples
+
+Minimal sample inputs are included in:
+
+- `examples/intake.json`
+- `examples/draft.md`
+- `examples/reference-pack.json`
+
+For a lightweight end-to-end validation, see:
+
+- `scripts/smoke_test_pipeline.py`
 
 ## What this project is
 
@@ -136,24 +282,12 @@ Think of it as a:
 
 This project does **not** guarantee:
 
-- school-specific compliance without the real official template
+- school-specific compliance without the real template or official guideline
 - real experimental validity
-- submission-readiness without human review
-- trustworthy data/result invention
+- final submission readiness without human review
+- automatic invention of trustworthy data, results, or references
 
-See `references/capability-boundaries.md` for current operational boundaries.
-
-## Examples
-
-Minimal sample inputs are included in:
-
-- `examples/intake.json`
-- `examples/draft.md`
-- `examples/reference-pack.json`
-
-For a lightweight end-to-end validation, see:
-
-- `scripts/smoke_test_pipeline.py`
+See `references/capability-boundaries.md` for the current operational boundary set.
 
 ## License
 
