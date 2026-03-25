@@ -5,53 +5,123 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![OpenClaw-first](https://img.shields.io/badge/OpenClaw-first-4f46e5)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Workflow](https://img.shields.io/badge/type-workflow%20engine-111827)
+![Workflow](https://img.shields.io/badge/type-workflow%20core-111827)
 
-> 🧭 *OpenClaw 优先的论文工作流内核，用来把论文需求推进成结构化、证据感知、图表感知、引用一致的可交付产物。*
+`paper-intake-router` 是一个 **论文 workflow core**，不是普通 AI 论文写作器。
 
-`paper-intake-router` 是一个 **面向 OpenClaw 的论文工作流 Skill / engine**。
+它解决的重点不是“多写几段字”，而是把论文任务里真正容易失控的那层流程收稳：需求归一化、任务单生成、图表规划、引用约束、产物组织，以及面向最终交付的渲染链路。
 
-它的重点不是“帮你多写几段字”，而是把学术写作里真正容易失控的那一层流程稳定下来。
+## 它适合做什么
 
-## 📚 目录
+当你需要 agent 或本地工作流去做这些事时，它就合适：
 
-- [为什么做这个项目](#-为什么做这个项目)
-- [它能做什么](#-它能做什么)
-- [OpenClaw 优先兼容说明](#-openclaw-优先兼容说明)
-- [工作流总览](#-工作流总览)
-- [仓库结构](#-仓库结构)
-- [安装](#-安装)
-- [API Key / 外部服务说明](#-api-key--外部服务说明)
-- [快速开始](#-快速开始)
-- [更详细的使用方法](#-更详细的使用方法)
-- [典型产物](#-典型产物)
-- [示例与验活](#-示例与验活)
-- [它是什么](#-它是什么)
-- [它不是什么](#-它不是什么)
-- [License](#license)
+- 把模糊论文需求归一化成结构化 task sheet
+- 在写正文前先决定下一阶段该做什么
+- 在草稿漂掉之前先把 figure/table 规划好
+- 保持图表编号和正文引用一致
+- 用稳定规则渲染终稿引用
+- 把中间产物收进一个任务工作区里
 
+## 它不适合承诺什么
 
-## ✨ 为什么做这个项目
+它 **不等于**：
 
-很多 AI 写作工具能生成段落，但在论文任务里，真正难的是这些环节：
+- 没有官方模板原件也能 100% 满足学校规范
+- 自动保证实验结果真实有效
+- 不经人工复核就能直接投稿或送审
+- 凭空生成可信参考文献和数据
+- 一次性“完美写完整篇论文”
 
-- 把模糊需求 intake 成结构化任务单
-- 分清原始材料和弱二手材料
-- 在写作前组织 evidence 与 citation
-- 在正文写完前先把图表规划好
-- 让图表编号、正文引用、终稿引用层保持一致
-- 让最终输出跟模板 / citation rendering profile 对齐
+如果这些边界对你很关键，建议尽早看 [`references/capability-boundaries.md`](./references/capability-boundaries.md)。
 
-*这个项目重点补的，就是这层“论文工作流引擎”。*
+## 60 秒上手
 
-## 🔧 它能做什么
+**输入：** [`examples/intake.json`](./examples/intake.json)
+
+**执行：**
+
+```bash
+python3 scripts/paper_router.py build-task -- \
+  --input examples/intake.json \
+  --out-json /tmp/task.json
+
+python3 scripts/paper_router.py init-workspace -- \
+  --base-dir /tmp/paper-runs \
+  --task /tmp/task.json \
+  --out-json /tmp/workspace.json
+
+python3 scripts/paper_router.py build-figure-plan -- \
+  --task /tmp/task.json \
+  --out-json /tmp/figure-plan.json
+
+python3 scripts/paper_router.py smoke-test
+```
+
+**输出：**
+
+- `/tmp/task.json`
+- `/tmp/workspace.json`
+- `/tmp/figure-plan.json`
+- 一条可本地验活、最终能渲染出带引用草稿的 smoke test 链路
+
+如果你更喜欢直接调用底层脚本，也可以继续用 `scripts/` 目录下的原始命令。
+
+## 按使用环境进入
+
+### For OpenClaw
+
+这个仓库首先是为 OpenClaw 生态设计的。
+
+如果你要的是一个放在 OpenClaw Skill 背后的论文工作流内核，而不是单纯的文本生成器，这就是它的目标定位。
+
+### For local CLI
+
+这套核心链路可以纯本地跑起来，依赖只是 Python。
+
+本地链路覆盖 task normalize、task workspace init、figure/table planning、validation、autofix 和 citation rendering。
+
+### For other agent runtimes
+
+它可以迁移到 Claude Code、OpenCode 或类似 agent runtime，但 **不保证开箱即用**。
+
+通常要自己适配：
+
+- runtime 假设
+- workspace / 路径约定
+- 上游检索与证据后端
+- 工具调用与命令编排方式
+
+## Workflow artifact map
+
+核心产物流大致是这样：
+
+```text
+intake.json
+  → task.json
+  → workspace.json
+  → figure-plan.json
+  → fixed.md / validation.json
+  → final.md
+```
+
+每个产物大致代表：
+
+- `task.json`：归一化后的论文任务单、默认值和路由信息
+- `workspace.json`：该任务的目录清单，统一管理 drafts、figures、tables、references 和 outputs
+- `figure-plan.json`：图表规划、编号规则和 codegen 目标
+- `validation.json`：草稿里的图表引用是否与 figure plan 一致
+- `final.md`：内部引用标记被解析后的终稿草稿
+
+## 核心能力
 
 ### Intake 和任务路由
-- 把需求归一化成 task sheet
+
+- 把需求归一化成结构化 task sheet
 - 推断论文类型、语言、风格、交付模式等默认值
 - 在没有官方模板时选择默认版式模板
 
 ### 文献与引用工作流
+
 - reference shortlist
 - screening 和 retry 检索链
 - reference pack
@@ -59,6 +129,7 @@
 - 按章节 / claim type 组织 citation plan
 
 ### 图表工作流
+
 - 在写作前先生成 figure/table plan
 - 从模板逻辑推导编号规则
 - 生成代码 / CSV / 产物脚手架
@@ -66,56 +137,13 @@
 - 自动修正图表说明句与引用模式
 
 ### 统一引用层
+
 - 普通正文段和图表说明句共用同一套 citation layer
 - 支持 `support-note`、`inline-marker`、`internal-anchor`
 - 支持 GB/T 7714 与 APA 风格渲染
 - 支持模板感知的 citation rendering profile
 
-## 🧩 OpenClaw 优先兼容说明
-
-这个仓库首先是为 **OpenClaw** 生态设计的。
-
-它也可以被迁移到其它 agent / CLI 环境，比如 **Claude Code**、**OpenCode** 或类似 coding-agent runtime，但**不保证开箱即用**。
-
-如果你要迁移到这些环境，通常需要自己调整：
-
-- runtime 假设
-- 工作区 / 路径约定
-- 上游检索与证据后端
-- 工具调用和命令编排方式
-
-## 🗺 工作流总览
-
-```mermaid
-flowchart LR
-    A[论文需求 intake] --> B[task sheet]
-    B --> C[文献与引用工作流]
-    B --> D[图表规划]
-    C --> E[writing evidence pack]
-    C --> F[citation plan]
-    D --> G[图表校验与自动修正]
-    E --> H[草稿 / 结构化写作]
-    F --> I[统一引用层]
-    G --> H
-    H --> I
-    I --> J[模板感知的终稿渲染]
-```
-
-## 🗂 仓库结构
-
-```text
-paper-intake-router/
-├── SKILL.md
-├── scripts/
-├── references/
-├── paper-template-library/
-├── examples/
-├── README.md
-├── README.zh-CN.md
-└── LICENSE
-```
-
-## 🚀 安装
+## 安装
 
 ### Linux / macOS / WSL
 
@@ -144,85 +172,20 @@ source .venv/bin/activate
 pip install -r requirements-minimal.txt
 ```
 
-## 🔑 API Key / 外部服务说明
+## 统一 CLI
 
-本地核心链本身**不强制要求 API Key**。例如这些步骤可以纯本地运行：
-
-- task sheet 生成
-- 图表规划
-- 本地图表校验与自动修正
-- 引用渲染
-- smoke test
-
-但如果你要跑完整的文献检索 / evidence-building 流水线，通常会受益于或依赖外部服务。常见例子包括：
-
-- Semantic Scholar API
-  - 官方入口：<https://www.semanticscholar.org/product/api>
-  - 教程：<https://www.semanticscholar.org/product/api/tutorial>
-  - 文档：<https://api.semanticscholar.org/api-docs/>
-- OpenAlex
-- Tavily / Exa / 其他检索服务
-
-*建议在你自己的部署文档里明确写清楚：用了哪个上游提供方、是否要求 API Key、应该去哪里申请，以及哪些步骤依赖这些外部凭据。*
-
-## ⚡ 快速开始
-
-### 1）生成 task sheet
+仓库里现在带了一层薄封装 CLI，用来承接最常见的 workflow 命令：
 
 ```bash
-python3 scripts/build_task_sheet.py \
-  --input examples/intake.json \
-  --out-json /tmp/task.json
-```
-
-### 2）初始化任务工作区
-
-```bash
-python3 scripts/init_task_workspace.py \
-  --base-dir /tmp/paper-runs \
-  --task /tmp/task.json \
-  --out-json /tmp/workspace.json
-```
-
-### 3）生成图表规划
-
-```bash
-python3 scripts/build_figure_table_plan.py \
-  --task /tmp/task.json \
-  --out-json /tmp/figure-plan.json
-```
-
-### 4）把图表说明句转成 internal anchor
-
-```bash
-python3 scripts/autofix_figure_table_refs.py \
-  --plan /tmp/figure-plan.json \
-  --draft examples/draft.md \
-  --citation-mode internal-anchor \
-  --out /tmp/fixed.md
-```
-
-### 5）渲染终稿引用
-
-```bash
-python3 scripts/render_final_citations.py \
-  --draft /tmp/fixed.md \
-  --reference-pack examples/reference-pack.json \
-  --style 'GB/T 7714' \
-  --out /tmp/final.md
-```
-
-### 可选：走统一 CLI
-
-```bash
-python3 scripts/paper_router.py build-task -- \
-  --input examples/intake.json \
-  --out-json /tmp/task.json
-
 python3 scripts/paper_router.py smoke-test
+python3 scripts/paper_router.py build-task -- --input examples/intake.json --out-json /tmp/task.json
+python3 scripts/paper_router.py init-workspace -- --base-dir /tmp/paper-runs --task /tmp/task.json --out-json /tmp/workspace.json
+python3 scripts/paper_router.py build-figure-plan -- --task /tmp/task.json --out-json /tmp/figure-plan.json
 ```
 
-## 🛠 更详细的使用方法
+它不替代底层脚本，只是让常用路径更容易发现，也更容易写进 README。
+
+## 更详细的使用方法
 
 ### 生成标准 task sheet
 
@@ -231,6 +194,15 @@ python3 scripts/build_task_sheet.py \
   --input examples/intake.json \
   --out-json /tmp/task.json \
   --out-md /tmp/task.md
+```
+
+### 初始化任务工作区
+
+```bash
+python3 scripts/init_task_workspace.py \
+  --base-dir /tmp/paper-runs \
+  --task /tmp/task.json \
+  --out-json /tmp/workspace.json
 ```
 
 ### 生成图表规划
@@ -276,34 +248,39 @@ python3 scripts/render_final_citations.py \
   --out /tmp/final.md
 ```
 
-## 📦 典型产物
+## 外部服务
 
-根据你走的链路不同，项目会生成这些中间 / 最终文件：
+本地核心链本身 **不强制要求 API Key**，这些步骤可以纯本地运行：
 
-- `task.json` / `task.md`
-- `references-shortlist.json` / `.md`
-- `reference-screening.json` / `.md`
-- `reference-pack.json` / `.md`
-- `writing-evidence-pack.json` / `.md`
-- `citation-plan.json` / `.md`
-- `figure-table-plan.json` / `.md`
-- 代码 / CSV / 图表 / 表格产物
-- fixed draft
-- final rendered draft
+- task sheet 生成
+- 图表规划
+- 本地图表校验与自动修正
+- 引用渲染
+- smoke test
 
-## 🧪 示例与验活
+但完整的文献检索 / evidence-building 链通常会受益于或依赖外部服务，比如：
+
+- Semantic Scholar API
+- OpenAlex
+- Tavily / Exa / 其他检索服务
+
+建议你在自己的部署文档里写清楚：用了哪些上游、哪些步骤依赖它们、是否需要 API Key。
+
+## 示例与验活
 
 仓库附带的最小示例：
 
-- `examples/intake.json`
-- `examples/draft.md`
-- `examples/reference-pack.json`
-- `examples/layout-samples/README.md`
+- [`examples/intake.json`](./examples/intake.json)
+- [`examples/draft.md`](./examples/draft.md)
+- [`examples/reference-pack.json`](./examples/reference-pack.json)
+- [`examples/layout-samples/README.md`](./examples/layout-samples/README.md)
 
 最小验活入口：
 
-- `python3 scripts/smoke_test_pipeline.py`
-- `python3 scripts/paper_router.py smoke-test`
+```bash
+python3 scripts/smoke_test_pipeline.py
+python3 scripts/paper_router.py smoke-test
+```
 
 当前 smoke test 覆盖：
 
@@ -314,33 +291,20 @@ python3 scripts/render_final_citations.py \
 - 图表引用校验
 - 终稿引用渲染
 
-## ✅ 它是什么
+## 仓库结构
 
-更准确地说，它是：
-
-- **论文工作流引擎**
-- **格式与引用稳定器**
-- **面向 Agent 的 draft-to-deliverable orchestration layer**
-
-## 🚫 它不是什么
-
-它**不保证**：
-
-- 在没有官方模板原件时完全符合学校 / 期刊规范
-- 实验结果的真实性
-- 无需人工复核即可直接投稿 / 送审
-- 自动发明可信数据、结果或参考文献
-- 默认附带可再分发的论文 PDF 排版样张
-
-当前边界见：
-
-- `references/capability-boundaries.md`
-
----
-
-⭐ *如果这个项目对你有帮助，欢迎点一个 Star。*
-
-🤝 *也欢迎 issue、讨论和贡献。*
+```text
+paper-intake-router/
+├── SKILL.md
+├── scripts/
+├── references/
+├── paper-template-library/
+├── examples/
+├── paper_intake_router/
+├── README.md
+├── README.zh-CN.md
+└── LICENSE
+```
 
 ## License
 
