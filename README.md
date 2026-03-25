@@ -2,12 +2,12 @@
 
 # paper-intake-router
 
-> OpenClaw-first workflow core for turning paper requests into structured, evidence-aware, figure-aware, citation-consistent deliverables.
+> 🧭 OpenClaw-first workflow core for turning paper requests into structured, evidence-aware, figure-aware, citation-consistent deliverables.
 
 `paper-intake-router` is an **OpenClaw-oriented paper workflow Skill / engine**.
-It is designed for academic work where text generation alone is not enough — the agent also needs workflow structure, source discipline, figure/table planning, and stable citation handling.
+It is built for academic work where text generation alone is not enough — the agent also needs workflow structure, source discipline, figure/table planning, and stable citation handling.
 
-## Why this project exists
+## ✨ Why this project exists
 
 Most AI writing tools can generate paragraphs.
 
@@ -22,7 +22,7 @@ Much fewer can reliably handle the operational side of academic writing:
 
 This project focuses on that missing layer.
 
-## What it does
+## 🔧 What it does
 
 ### Intake and task routing
 - normalize requests into structured task sheets
@@ -49,7 +49,7 @@ This project focuses on that missing layer.
 - renders final citations into GB/T 7714 or APA-style output
 - supports template-aware citation rendering profiles
 
-## OpenClaw-first compatibility
+## 🧩 OpenClaw-first compatibility
 
 This repository is built first for the **OpenClaw** ecosystem.
 
@@ -62,7 +62,7 @@ If you are using another environment, expect to adapt:
 - upstream search and evidence backends
 - tool wiring and invocation glue
 
-## Repository layout
+## 🗂 Repository layout
 
 ```text
 paper-intake-router/
@@ -76,7 +76,7 @@ paper-intake-router/
 └── LICENSE
 ```
 
-## Installation
+## 🚀 Installation
 
 ### Linux / macOS / WSL
 
@@ -105,7 +105,7 @@ source .venv/bin/activate
 pip install -r requirements-minimal.txt
 ```
 
-## API keys and external services
+## 🔑 API keys and external services
 
 The **local core workflow** does **not** require API keys for:
 
@@ -128,7 +128,7 @@ Typical examples:
 
 Recommendation: document clearly in your own deployment which upstream providers are required and which steps depend on them.
 
-## Quick start
+## ⚡ Quick start
 
 ### 1. Build a task sheet
 
@@ -166,7 +166,7 @@ python3 scripts/render_final_citations.py \
   --out /tmp/final.md
 ```
 
-## More detailed usage
+## 🛠 More detailed usage
 
 ### Build a normalized task sheet
 
@@ -220,7 +220,7 @@ python3 scripts/render_final_citations.py \
   --out /tmp/final.md
 ```
 
-## Typical artifacts
+## 📦 Typical artifacts
 
 Depending on the path you run, the workflow may produce:
 
@@ -235,7 +235,7 @@ Depending on the path you run, the workflow may produce:
 - fixed drafts
 - final rendered drafts
 
-## Examples and validation
+## 🧪 Examples and validation
 
 Included examples:
 
@@ -248,7 +248,7 @@ Minimal validation entrypoint:
 
 - `scripts/smoke_test_pipeline.py`
 
-## What this project is
+## ✅ What this project is
 
 This project is best thought of as a:
 
@@ -256,7 +256,7 @@ This project is best thought of as a:
 - **formatting and citation stabilizer**
 - **draft-to-deliverable orchestration layer for agents**
 
-## What this project is not
+## 🚫 What this project is not
 
 It does **not** guarantee:
 

@@ -2,12 +2,12 @@
 
 # paper-intake-router
 
-> OpenClaw 优先的论文工作流内核，用来把论文需求推进成结构化、证据感知、图表感知、引用一致的可交付产物。
+> 🧭 OpenClaw 优先的论文工作流内核，用来把论文需求推进成结构化、证据感知、图表感知、引用一致的可交付产物。
 
 `paper-intake-router` 是一个 **面向 OpenClaw 的论文工作流 Skill / engine**。
 它的重点不是“帮你多写几段字”，而是把学术写作里真正容易失控的那一层流程稳定下来。
 
-## 为什么做这个项目
+## ✨ 为什么做这个项目
 
 很多 AI 写作工具能生成段落，但在论文任务里，真正难的是这些环节：
 
@@ -20,7 +20,7 @@
 
 这个项目重点补的，就是这层“论文工作流引擎”。
 
-## 它能做什么
+## 🔧 它能做什么
 
 ### Intake 和任务路由
 - 把需求归一化成 task sheet
@@ -47,7 +47,7 @@
 - 支持 GB/T 7714 与 APA 风格渲染
 - 支持模板感知的 citation rendering profile
 
-## OpenClaw 优先兼容说明
+## 🧩 OpenClaw 优先兼容说明
 
 这个仓库首先是为 **OpenClaw** 生态设计的。
 
@@ -60,7 +60,7 @@
 - 上游检索与证据后端
 - 工具调用和命令编排方式
 
-## 仓库结构
+## 🗂 仓库结构
 
 ```text
 paper-intake-router/
@@ -74,7 +74,7 @@ paper-intake-router/
 └── LICENSE
 ```
 
-## 安装
+## 🚀 安装
 
 ### Linux / macOS / WSL
 
@@ -103,7 +103,7 @@ source .venv/bin/activate
 pip install -r requirements-minimal.txt
 ```
 
-## API Key / 外部服务说明
+## 🔑 API Key / 外部服务说明
 
 本地核心链本身**不强制要求 API Key**。例如这些步骤可以纯本地运行：
 
@@ -129,7 +129,7 @@ pip install -r requirements-minimal.txt
 - 应该去哪里申请
 - 哪些步骤依赖这些外部凭据
 
-## 快速开始
+## ⚡ 快速开始
 
 ### 1）生成 task sheet
 
@@ -167,7 +167,7 @@ python3 scripts/render_final_citations.py \
   --out /tmp/final.md
 ```
 
-## 更详细的使用方法
+## 🛠 更详细的使用方法
 
 ### 生成标准 task sheet
 
@@ -221,7 +221,7 @@ python3 scripts/render_final_citations.py \
   --out /tmp/final.md
 ```
 
-## 典型产物
+## 📦 典型产物
 
 根据你走的链路不同，项目会生成这些中间 / 最终文件：
 
@@ -236,7 +236,7 @@ python3 scripts/render_final_citations.py \
 - fixed draft
 - final rendered draft
 
-## 示例与验活
+## 🧪 示例与验活
 
 仓库附带的最小示例：
 
@@ -249,7 +249,7 @@ python3 scripts/render_final_citations.py \
 
 - `scripts/smoke_test_pipeline.py`
 
-## 它是什么
+## ✅ 它是什么
 
 更准确地说，它是：
 
@@ -257,7 +257,7 @@ python3 scripts/render_final_citations.py \
 - **格式与引用稳定器**
 - **面向 Agent 的 draft-to-deliverable orchestration layer**
 
-## 它不是什么
+## 🚫 它不是什么
 
 它**不保证**：
 
