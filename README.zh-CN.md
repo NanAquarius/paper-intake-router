@@ -2,10 +2,13 @@
 
 # paper-intake-router
 
-![License](https://img.shields.io/badge/license-MIT-green)
-![OpenClaw-first](https://img.shields.io/badge/OpenClaw-first-4f46e5)
-![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Workflow](https://img.shields.io/badge/type-workflow%20core-111827)
+[![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+[![OpenClaw-first](https://img.shields.io/badge/OpenClaw-first-4f46e5)](#-按使用环境进入)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)](#-安装)
+[![Smoke-tested](https://img.shields.io/badge/validated-smoke%20test-0f766e)](#-示例与验活)
+[![CLI](https://img.shields.io/badge/CLI-paper__router.py-111827)](#-统一-cli)
+[![Citations](https://img.shields.io/badge/citations-GB%2FT%207714%20%7C%20APA-7c3aed)](#-核心能力)
+[![Task workspace](https://img.shields.io/badge/artifacts-task%20workspace-9a3412)](#-workflow-artifact-map)
 
 > 🧭 *把模糊论文需求推进成结构化、证据感知、图表感知、引用一致的可交付产物。*
 

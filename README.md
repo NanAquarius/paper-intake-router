@@ -2,10 +2,13 @@
 
 # paper-intake-router
 
-![License](https://img.shields.io/badge/license-MIT-green)
-![OpenClaw-first](https://img.shields.io/badge/OpenClaw-first-4f46e5)
-![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
-![Workflow](https://img.shields.io/badge/type-workflow%20core-111827)
+[![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+[![OpenClaw-first](https://img.shields.io/badge/OpenClaw-first-4f46e5)](#-start-here-by-environment)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)](#-installation)
+[![Smoke-tested](https://img.shields.io/badge/validated-smoke%20test-0f766e)](#-examples-and-validation)
+[![CLI](https://img.shields.io/badge/CLI-paper__router.py-111827)](#-unified-cli)
+[![Citations](https://img.shields.io/badge/citations-GB%2FT%207714%20%7C%20APA-7c3aed)](#-what-the-core-covers)
+[![Task workspace](https://img.shields.io/badge/artifacts-task%20workspace-9a3412)](#-workflow-artifact-map)
 
 > 🧭 *A paper workflow core for turning vague paper requests into structured, evidence-aware, figure-aware, citation-consistent deliverables.*
 
