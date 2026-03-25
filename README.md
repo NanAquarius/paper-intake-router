@@ -13,6 +13,24 @@
 
 It is built for academic work where text generation alone is not enough — the agent also needs workflow structure, source discipline, figure/table planning, and stable citation handling.
 
+## 📚 Contents
+
+- [Why this project exists](#-why-this-project-exists)
+- [What it does](#-what-it-does)
+- [OpenClaw-first compatibility](#-openclaw-first-compatibility)
+- [Workflow at a glance](#-workflow-at-a-glance)
+- [Repository layout](#-repository-layout)
+- [Installation](#-installation)
+- [API keys and external services](#-api-keys-and-external-services)
+- [Quick start](#-quick-start)
+- [More detailed usage](#-more-detailed-usage)
+- [Typical artifacts](#-typical-artifacts)
+- [Examples and validation](#-examples-and-validation)
+- [What this project is](#-what-this-project-is)
+- [What this project is not](#-what-this-project-is-not)
+- [License](#license)
+
+
 ## ✨ Why this project exists
 
 Most AI writing tools can generate paragraphs.
