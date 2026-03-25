@@ -330,3 +330,13 @@ paper-intake-router/
 ## License
 
 MIT
+
+---
+
+<div align="center">
+
+*如果这套 workflow core 对你的论文流程有帮助，欢迎点个 Star、提个 issue，或者告诉我你的实际使用场景。*
+
+<sub>⭐ <a href="https://github.com/NanAquarius/paper-intake-router">Star</a> &nbsp;·&nbsp; 🐛 <a href="https://github.com/NanAquarius/paper-intake-router/issues">Issue</a> &nbsp;·&nbsp; 🤝 <a href="https://github.com/NanAquarius/paper-intake-router/pulls">PR</a></sub>
+
+</div>
