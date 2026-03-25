@@ -7,11 +7,13 @@
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
 ![Workflow](https://img.shields.io/badge/type-workflow%20core-111827)
 
+> 🧭 *A paper workflow core for turning vague paper requests into structured, evidence-aware, figure-aware, citation-consistent deliverables.*
+
 `paper-intake-router` is a **paper workflow core**, not a generic AI paper writer.
 
 It is built for academic work where the hard part is not only drafting paragraphs, but also turning a vague request into a stable workflow with task normalization, figure/table planning, citation discipline, and deliverable-aware rendering.
 
-## What it is for
+## ✨ What it is for
 
 Use it when you need an agent or local workflow to do things like:
 
@@ -22,7 +24,7 @@ Use it when you need an agent or local workflow to do things like:
 - render citations in a predictable final style
 - keep intermediate artifacts organized in a task workspace
 
-## What it is not for
+## 🚫 What it is not for
 
 It is **not** a promise of:
 
@@ -34,7 +36,7 @@ It is **not** a promise of:
 
 If that boundary matters for your use case, read [`references/capability-boundaries.md`](./references/capability-boundaries.md) early.
 
-## 60-second path
+## ⚡ 60-second path
 
 **Input:** [`examples/intake.json`](./examples/intake.json)
 
@@ -66,7 +68,7 @@ python3 scripts/paper_router.py smoke-test
 
 If you prefer raw scripts, the same workflow is available under `scripts/`.
 
-## Start here by environment
+## 🧩 Start here by environment
 
 ### For OpenClaw
 
@@ -91,7 +93,7 @@ Expect to adapt:
 - upstream search and evidence backends
 - tool wiring and invocation glue
 
-## Workflow artifact map
+## 🗺 Workflow artifact map
 
 The core artifact flow looks like this:
 
@@ -112,7 +114,7 @@ What each artifact means:
 - `validation.json`: consistency check between draft references and the figure plan
 - `final.md`: citation-rendered draft after internal markers are resolved
 
-## What the core covers
+## 🔧 What the core covers
 
 ### Intake and task routing
 
@@ -143,7 +145,7 @@ What each artifact means:
 - renders final citations into GB/T 7714 or APA-style output
 - supports template-aware citation rendering profiles
 
-## Installation
+## 🚀 Installation
 
 ### Linux / macOS / WSL
 
@@ -172,7 +174,7 @@ source .venv/bin/activate
 pip install -r requirements-minimal.txt
 ```
 
-## Unified CLI
+## 🛠 Unified CLI
 
 The repository includes a thin CLI wrapper for the main workflow scripts:
 
@@ -185,7 +187,7 @@ python3 scripts/paper_router.py build-figure-plan -- --task /tmp/task.json --out
 
 This wrapper does not replace the underlying scripts. It makes the common path easier to discover and easier to document.
 
-## More detailed usage
+## 🧰 More detailed usage
 
 ### Build a normalized task sheet
 
@@ -248,7 +250,7 @@ python3 scripts/render_final_citations.py \
   --out /tmp/final.md
 ```
 
-## External services
+## 🔑 External services
 
 The local core workflow does **not** require API keys for:
 
@@ -266,7 +268,7 @@ Full literature-search and evidence-building flows often benefit from or depend 
 
 Document clearly in your own deployment which upstream providers are required and which steps depend on them.
 
-## Examples and validation
+## 🧪 Examples and validation
 
 Included examples:
 
@@ -291,7 +293,7 @@ The current smoke test covers:
 - figure reference validation
 - final citation rendering
 
-## Repository layout
+## 🗂 Repository layout
 
 ```text
 paper-intake-router/

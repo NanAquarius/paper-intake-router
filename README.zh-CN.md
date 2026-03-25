@@ -7,11 +7,13 @@
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
 ![Workflow](https://img.shields.io/badge/type-workflow%20core-111827)
 
+> 🧭 *把模糊论文需求推进成结构化、证据感知、图表感知、引用一致的可交付产物。*
+
 `paper-intake-router` 是一个 **论文 workflow core**，不是普通 AI 论文写作器。
 
 它解决的重点不是“多写几段字”，而是把论文任务里真正容易失控的那层流程收稳：需求归一化、任务单生成、图表规划、引用约束、产物组织，以及面向最终交付的渲染链路。
 
-## 它适合做什么
+## ✨ 它适合做什么
 
 当你需要 agent 或本地工作流去做这些事时，它就合适：
 
@@ -22,7 +24,7 @@
 - 用稳定规则渲染终稿引用
 - 把中间产物收进一个任务工作区里
 
-## 它不适合承诺什么
+## 🚫 它不适合承诺什么
 
 它 **不等于**：
 
@@ -34,7 +36,7 @@
 
 如果这些边界对你很关键，建议尽早看 [`references/capability-boundaries.md`](./references/capability-boundaries.md)。
 
-## 60 秒上手
+## ⚡ 60 秒上手
 
 **输入：** [`examples/intake.json`](./examples/intake.json)
 
@@ -66,7 +68,7 @@ python3 scripts/paper_router.py smoke-test
 
 如果你更喜欢直接调用底层脚本，也可以继续用 `scripts/` 目录下的原始命令。
 
-## 按使用环境进入
+## 🧩 按使用环境进入
 
 ### For OpenClaw
 
@@ -91,7 +93,7 @@ python3 scripts/paper_router.py smoke-test
 - 上游检索与证据后端
 - 工具调用与命令编排方式
 
-## Workflow artifact map
+## 🗺 Workflow artifact map
 
 核心产物流大致是这样：
 
@@ -112,7 +114,7 @@ intake.json
 - `validation.json`：草稿里的图表引用是否与 figure plan 一致
 - `final.md`：内部引用标记被解析后的终稿草稿
 
-## 核心能力
+## 🔧 核心能力
 
 ### Intake 和任务路由
 
@@ -143,7 +145,7 @@ intake.json
 - 支持 GB/T 7714 与 APA 风格渲染
 - 支持模板感知的 citation rendering profile
 
-## 安装
+## 🚀 安装
 
 ### Linux / macOS / WSL
 
@@ -172,7 +174,7 @@ source .venv/bin/activate
 pip install -r requirements-minimal.txt
 ```
 
-## 统一 CLI
+## 🛠 统一 CLI
 
 仓库里现在带了一层薄封装 CLI，用来承接最常见的 workflow 命令：
 
@@ -185,7 +187,7 @@ python3 scripts/paper_router.py build-figure-plan -- --task /tmp/task.json --out
 
 它不替代底层脚本，只是让常用路径更容易发现，也更容易写进 README。
 
-## 更详细的使用方法
+## 🧰 更详细的使用方法
 
 ### 生成标准 task sheet
 
@@ -248,7 +250,7 @@ python3 scripts/render_final_citations.py \
   --out /tmp/final.md
 ```
 
-## 外部服务
+## 🔑 外部服务
 
 本地核心链本身 **不强制要求 API Key**，这些步骤可以纯本地运行：
 
@@ -266,7 +268,7 @@ python3 scripts/render_final_citations.py \
 
 建议你在自己的部署文档里写清楚：用了哪些上游、哪些步骤依赖它们、是否需要 API Key。
 
-## 示例与验活
+## 🧪 示例与验活
 
 仓库附带的最小示例：
 
@@ -291,7 +293,7 @@ python3 scripts/paper_router.py smoke-test
 - 图表引用校验
 - 终稿引用渲染
 
-## 仓库结构
+## 🗂 仓库结构
 
 ```text
 paper-intake-router/
