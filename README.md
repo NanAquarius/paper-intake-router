@@ -22,6 +22,23 @@ Much fewer can reliably handle the operational side of academic writing:
 
 This project focuses on that missing layer.
 
+## 🗺 Workflow at a glance
+
+```mermaid
+flowchart LR
+    A[Intake request] --> B[Task sheet]
+    B --> C[Evidence and citation workflow]
+    B --> D[Figure / table planning]
+    C --> E[Writing evidence pack]
+    C --> F[Citation plan]
+    D --> G[Figure validation and autofix]
+    E --> H[Draft / structured writing]
+    F --> I[Unified citation layer]
+    G --> H
+    H --> I
+    I --> J[Template-aware final rendering]
+```
+
 ## 🔧 What it does
 
 ### Intake and task routing

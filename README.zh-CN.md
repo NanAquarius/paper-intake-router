@@ -20,6 +20,23 @@
 
 这个项目重点补的，就是这层“论文工作流引擎”。
 
+## 🗺 工作流总览
+
+```mermaid
+flowchart LR
+    A[论文需求 intake] --> B[task sheet]
+    B --> C[文献与引用工作流]
+    B --> D[图表规划]
+    C --> E[writing evidence pack]
+    C --> F[citation plan]
+    D --> G[图表校验与自动修正]
+    E --> H[草稿 / 结构化写作]
+    F --> I[统一引用层]
+    G --> H
+    H --> I
+    I --> J[模板感知的终稿渲染]
+```
+
 ## 🔧 它能做什么
 
 ### Intake 和任务路由
