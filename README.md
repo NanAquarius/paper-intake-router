@@ -9,6 +9,22 @@
 
 > 🧭 *A paper workflow core for turning vague paper requests into structured, evidence-aware, figure-aware, citation-consistent deliverables.*
 
+## 📚 Contents
+
+- [✨ What it is for](#-what-it-is-for)
+- [🚫 What it is not for](#-what-it-is-not-for)
+- [⚡ 60-second path](#-60-second-path)
+- [🧩 Start here by environment](#-start-here-by-environment)
+- [🗺 Workflow artifact map](#-workflow-artifact-map)
+- [🔧 What the core covers](#-what-the-core-covers)
+- [🚀 Installation](#-installation)
+- [🛠 Unified CLI](#-unified-cli)
+- [🧰 More detailed usage](#-more-detailed-usage)
+- [🔑 External services](#-external-services)
+- [🧪 Examples and validation](#-examples-and-validation)
+- [🗂 Repository layout](#-repository-layout)
+- [License](#license)
+
 `paper-intake-router` is a **paper workflow core**, not a generic AI paper writer.
 
 It is built for academic work where the hard part is not only drafting paragraphs, but also turning a vague request into a stable workflow with task normalization, figure/table planning, citation discipline, and deliverable-aware rendering.
