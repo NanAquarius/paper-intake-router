@@ -179,7 +179,16 @@ python3 scripts/build_task_sheet.py \
   --out-json /tmp/task.json
 ```
 
-### 2. Build a figure/table plan
+### 2. Initialize a task workspace
+
+```bash
+python3 scripts/init_task_workspace.py \
+  --base-dir /tmp/paper-runs \
+  --task /tmp/task.json \
+  --out-json /tmp/workspace.json
+```
+
+### 3. Build a figure/table plan
 
 ```bash
 python3 scripts/build_figure_table_plan.py \
@@ -187,7 +196,7 @@ python3 scripts/build_figure_table_plan.py \
   --out-json /tmp/figure-plan.json
 ```
 
-### 3. Convert figure text into internal anchors
+### 4. Convert figure text into internal anchors
 
 ```bash
 python3 scripts/autofix_figure_table_refs.py \
@@ -197,7 +206,7 @@ python3 scripts/autofix_figure_table_refs.py \
   --out /tmp/fixed.md
 ```
 
-### 4. Render final citations
+### 5. Render final citations
 
 ```bash
 python3 scripts/render_final_citations.py \
@@ -205,6 +214,16 @@ python3 scripts/render_final_citations.py \
   --reference-pack examples/reference-pack.json \
   --style 'GB/T 7714' \
   --out /tmp/final.md
+```
+
+### Optional: use the unified CLI
+
+```bash
+python3 scripts/paper_router.py build-task -- \
+  --input examples/intake.json \
+  --out-json /tmp/task.json
+
+python3 scripts/paper_router.py smoke-test
 ```
 
 ## 🛠 More detailed usage
@@ -285,9 +304,19 @@ Included examples:
 - `examples/reference-pack.json`
 - `examples/layout-samples/README.md`
 
-Minimal validation entrypoint:
+Minimal validation entrypoints:
 
-- `scripts/smoke_test_pipeline.py`
+- `python3 scripts/smoke_test_pipeline.py`
+- `python3 scripts/paper_router.py smoke-test`
+
+What the smoke test currently covers:
+
+- task normalization
+- task workspace initialization
+- figure/table plan generation
+- figure reference autofix
+- figure reference validation
+- final citation rendering
 
 ## ✅ What this project is
 

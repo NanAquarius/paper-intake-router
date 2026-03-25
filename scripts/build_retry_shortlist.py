@@ -2,19 +2,22 @@
 import argparse
 import importlib.util
 import json
+import sys
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent
-SHORTLIST_PATH = ROOT / 'build_reference_shortlist.py'
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from paper_intake_router.paths import import_module_from_path, skill_script
+
+ROOT = REPO_ROOT / 'scripts'
+SHORTLIST_PATH = skill_script(REPO_ROOT, 'build_reference_shortlist.py')
 
 
 def load_shortlist_module():
-    spec = importlib.util.spec_from_file_location('build_reference_shortlist', SHORTLIST_PATH)
-    module = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
-    spec.loader.exec_module(module)
-    return module
+    return import_module_from_path('build_reference_shortlist', SHORTLIST_PATH)
 
 
 def main():
@@ -118,36 +121,22 @@ def main():
 
     deduped, dup_excluded = mod.dedupe(filtered)
     excluded.extend(dup_excluded)
-    ranked = sorted(deduped, key=lambda x: (x.get('_score', 0), x.get('citationCount') or 0, x.get('year') or 0), reverse=True)
-    papers = []
-    for i, item in enumerate(ranked[:8], 1):
-        papers.append({
-            'rank': i,
-            'title': item.get('title', ''),
-            'authors': item.get('authors', []),
-            'year': item.get('year'),
-            'doi': item.get('doi', ''),
-            'arxivId': item.get('arxivId', ''),
-            'landingPage': item.get('landingPage', ''),
-            'pdfUrl': item.get('pdfUrl', ''),
-            'citationCount': item.get('citationCount'),
-            'source': item.get('source', ''),
-            'relevanceNote': item.get('relevanceNote', ''),
-            'evidenceType': item.get('evidenceType', 'method'),
-            'openAccess': item.get('openAccess'),
-            'needsVerification': item.get('needsVerification', False)
-        })
 
-    out = {
+    for item in deduped:
+        item.pop('_queryKind', None)
+        item.pop('_score', None)
+
+    result = {
         'topic': base_topic,
         'queries': used_queries,
         'generatedAt': datetime.now().astimezone().isoformat(timespec='seconds'),
         'sourcesUsed': sources_used,
         'selectionPolicy': base.get('selectionPolicy', {}),
-        'papers': papers,
+        'papers': deduped[: max(len(base.get('papers', [])), 8)],
         'excluded': excluded,
     }
-    Path(args.out_json).write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding='utf-8')
+
+    Path(args.out_json).write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
     print(args.out_json)
 
 

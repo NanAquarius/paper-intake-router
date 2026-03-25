@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 import json
 import shutil
+import sys
 from pathlib import Path
 
-WORKSPACE = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from paper_intake_router.paths import repo_root_from_file, workspace_root
+
+REPO_ROOT = repo_root_from_file(__file__)
+WORKSPACE = workspace_root(REPO_ROOT)
 SKILL_DIR_CANDIDATES = [
     WORKSPACE / "skills",
     WORKSPACE / ".claude" / "skills",
@@ -25,7 +33,6 @@ def skill_exists(existing: set[str], names: list[str]) -> bool:
 
 def main():
     existing = _collect_existing_skills()
-    # Local user-space fallback binaries (no root needed)
     local_bin = WORKSPACE / ".paper-tools" / "bin"
     local_quarto = local_bin / "quarto"
     local_pandoc = local_bin / "pandoc"
@@ -46,11 +53,13 @@ def main():
             "xelatex": (shutil.which("xelatex") is not None) or ((WORKSPACE / ".paper-tools" / "bin" / "tectonic").exists()),
         },
         "paths": {
+            "workspace": str(WORKSPACE),
+            "repoRoot": str(REPO_ROOT),
             "localQuarto": str(local_quarto) if local_quarto.exists() else None,
             "localPandoc": str(local_pandoc) if local_pandoc.exists() else None,
             "localManubot": str(Path.home() / ".local" / "bin" / "manubot") if (Path.home() / ".local" / "bin" / "manubot").exists() else None,
             "localTectonic": str(WORKSPACE / ".paper-tools" / "bin" / "tectonic") if (WORKSPACE / ".paper-tools" / "bin" / "tectonic").exists() else None,
-        }
+        },
     }
 
     caps["summary"] = {

@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 import argparse
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from paper_intake_router.paths import repo_root_from_file, workspace_root
 
 DEFAULTS = {
     "zh": {
@@ -56,12 +63,16 @@ STYLE_ALIASES = {
 }
 
 
-def workspace_root() -> Path:
-    return Path(__file__).resolve().parents[3]
+def current_repo_root() -> Path:
+    return repo_root_from_file(__file__)
 
 
 def layout_template_dir() -> Path:
-    return workspace_root() / "paper-template-library" / "layout" / "defaults"
+    repo_root = current_repo_root()
+    repo_local = repo_root / "paper-template-library" / "layout" / "defaults"
+    if repo_local.exists():
+        return repo_local
+    return workspace_root(repo_root) / "paper-template-library" / "layout" / "defaults"
 
 
 def normalize_paper_type(value: str | None) -> str:

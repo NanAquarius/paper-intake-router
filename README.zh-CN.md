@@ -175,7 +175,16 @@ python3 scripts/build_task_sheet.py \
   --out-json /tmp/task.json
 ```
 
-### 2）生成图表规划
+### 2）初始化任务工作区
+
+```bash
+python3 scripts/init_task_workspace.py \
+  --base-dir /tmp/paper-runs \
+  --task /tmp/task.json \
+  --out-json /tmp/workspace.json
+```
+
+### 3）生成图表规划
 
 ```bash
 python3 scripts/build_figure_table_plan.py \
@@ -183,7 +192,7 @@ python3 scripts/build_figure_table_plan.py \
   --out-json /tmp/figure-plan.json
 ```
 
-### 3）把图表说明句转成 internal anchor
+### 4）把图表说明句转成 internal anchor
 
 ```bash
 python3 scripts/autofix_figure_table_refs.py \
@@ -193,7 +202,7 @@ python3 scripts/autofix_figure_table_refs.py \
   --out /tmp/fixed.md
 ```
 
-### 4）渲染终稿引用
+### 5）渲染终稿引用
 
 ```bash
 python3 scripts/render_final_citations.py \
@@ -201,6 +210,16 @@ python3 scripts/render_final_citations.py \
   --reference-pack examples/reference-pack.json \
   --style 'GB/T 7714' \
   --out /tmp/final.md
+```
+
+### 可选：走统一 CLI
+
+```bash
+python3 scripts/paper_router.py build-task -- \
+  --input examples/intake.json \
+  --out-json /tmp/task.json
+
+python3 scripts/paper_router.py smoke-test
 ```
 
 ## 🛠 更详细的使用方法
@@ -283,7 +302,17 @@ python3 scripts/render_final_citations.py \
 
 最小验活入口：
 
-- `scripts/smoke_test_pipeline.py`
+- `python3 scripts/smoke_test_pipeline.py`
+- `python3 scripts/paper_router.py smoke-test`
+
+当前 smoke test 覆盖：
+
+- task 归一化
+- 任务工作区初始化
+- 图表规划生成
+- 图表引用自动修正
+- 图表引用校验
+- 终稿引用渲染
 
 ## ✅ 它是什么
 

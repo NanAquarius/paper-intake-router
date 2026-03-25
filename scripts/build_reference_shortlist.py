@@ -3,9 +3,16 @@ import argparse
 import json
 import re
 import subprocess
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from paper_intake_router.paths import run_python_script, skill_script
 
 STOPWORDS = {
     'a', 'an', 'the', 'of', 'for', 'in', 'on', 'to', 'and', 'or', 'with', 'without', 'from', 'by', 'using', 'based',
@@ -32,7 +39,6 @@ def normalize_title(title: str) -> str:
 
 def title_signature(title: str) -> str:
     nt = normalize_title(title)
-    # Use first 8 significant tokens as fuzzy same-paper signature
     toks = [t for t in nt.split() if t and t not in STOPWORDS]
     return ' '.join(toks[:8])
 
@@ -236,7 +242,6 @@ def dedupe(items: list[dict]) -> tuple[list[dict], list[dict]]:
             continue
         sig = title_signature(title)
         year = item.get('year') or ''
-        # Prefer collapsing same-title same-year variants (arXiv / proceedings / DOI mirrors)
         key = (f"{sig}:{year}" if sig else '') or item.get('arxivId') or item.get('doi') or normalize_title(title)
         prev = seen.get(key)
         if prev is None:
@@ -258,6 +263,100 @@ def dedupe(items: list[dict]) -> tuple[list[dict], list[dict]]:
 def build_shortlist(topic: str, target_count: int = 8) -> dict:
     current_year = datetime.now().year
     topic_terms = significant_terms(topic)
+    all_items = []
+    sources_used = []
+    excluded = []
+
+    for source_name, loader in [
+        ('openalex', lambda: parse_openalex(topic, per_page=max(target_count + 4, 12))),
+        ('semantic-scholar', lambda: parse_semantic(topic, limit=max(target_count + 2, 10))),
+        ('research-papers', lambda: parse_research_papers(topic, max_results=max(target_count, 6))),
+    ]:
+        try:
+            batch = loader()
+            all_items.extend(batch)
+            sources_used.append(source_name)
+        except Exception as exc:
+            excluded.append({'title': source_name, 'reason': f'source_error: {exc}'})
+
+    scored = []
+    for item in all_items:
+        title = item.get('title', '')
+        if not title.strip():
+            continue
+        overlap = keyword_overlap(title, topic_terms)
+        norm_topic = normalize_title(topic)
+        norm_title = normalize_title(title)
+        item['evidenceType'] = classify_evidence(title, item.get('year'), item.get('citationCount'), current_year)
+        item['_score'] = score_item(item, topic, topic_terms, current_year)
+        item['relevanceNote'] = '题目相关，且元数据较完整。' if overlap > 0 or norm_topic in norm_title else '相关性偏弱，建议人工复核。'
+        item['needsVerification'] = not bool(item.get('doi') or item.get('arxivId'))
+        if topic_terms and overlap == 0 and norm_topic not in norm_title:
+            excluded.append({'title': title, 'reason': 'weak_match'})
+            continue
+        scored.append(item)
+
+    deduped, dup_excluded = dedupe(scored)
+    excluded.extend(dup_excluded)
+    deduped.sort(key=lambda x: x.get('_score', 0), reverse=True)
+    selected = deduped[:target_count]
+
+    papers = []
+    for i, item in enumerate(selected, start=1):
+        papers.append({
+            'rank': i,
+            'title': item.get('title', ''),
+            'authors': item.get('authors', []),
+            'year': item.get('year'),
+            'doi': item.get('doi', ''),
+            'arxivId': item.get('arxivId', ''),
+            'landingPage': item.get('landingPage', ''),
+            'pdfUrl': item.get('pdfUrl', ''),
+            'citationCount': item.get('citationCount'),
+            'source': item.get('source', ''),
+            'relevanceNote': item.get('relevanceNote', ''),
+            'evidenceType': item.get('evidenceType', 'method'),
+            'openAccess': item.get('openAccess'),
+            'needsVerification': item.get('needsVerification', False)
+        })
+    return {
+        'topic': topic,
+        'queries': [topic],
+        'generatedAt': datetime.now().astimezone().isoformat(timespec='seconds'),
+        'sourcesUsed': sources_used,
+        'selectionPolicy': {
+            'targetCount': target_count,
+            'mustIncludeRecentYears': 3,
+            'preferCanonical': True,
+            'preferOpenAccess': True,
+        },
+        'papers': papers,
+        'excluded': excluded,
+    }
+
+
+def main():
+    ap = argparse.ArgumentParser(description='Build reference shortlist from academic paper MCPs')
+    ap.add_argument('--topic', required=True)
+    ap.add_argument('--out-json', required=True)
+    ap.add_argument('--out-md')
+    ap.add_argument('--target-count', type=int, default=8)
+    args = ap.parse_args()
+
+    data = build_shortlist(args.topic, args.target_count)
+    out_json = Path(args.out_json)
+    out_json.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
+    print(out_json)
+    if args.out_md:
+        run_python_script(
+            skill_script(REPO_ROOT, 'render_reference_shortlist.py'),
+            '--input', str(out_json),
+            '--out-md', args.out_md,
+        )
+
+
+if __name__ == '__main__':
+    main()
     raw_items = []
     sources_used = []
 

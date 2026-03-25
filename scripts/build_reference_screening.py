@@ -1,72 +1,71 @@
 #!/usr/bin/env python3
 import argparse
 import json
+import sys
 from datetime import datetime
 from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from paper_intake_router.paths import run_python_script, skill_script
 
 
 def build_screening(shortlist: dict) -> dict:
     papers = shortlist.get('papers', [])
-    accepted = []
-    rejected = []
+    included = []
+    excluded = []
     warnings = []
 
-    sorted_papers = sorted(papers, key=lambda p: ((p.get('citationCount') or 0), p.get('year') or 0), reverse=True)
-    target = 8
-    accepted = sorted_papers[:target]
-    rejected_candidates = sorted_papers[target:]
+    for paper in papers:
+        title = paper.get('title', '')
+        evidence_type = paper.get('evidenceType', 'method')
+        weak = paper.get('needsVerification', False)
+        if not title.strip():
+            continue
+        if evidence_type == 'survey' or evidence_type == 'canonical' or paper.get('rank', 999) <= 6:
+            included.append({
+                'title': title,
+                'decision': 'keep',
+                'reason': '高相关或高价值证据，保留进入 reference pack。',
+                'evidenceType': evidence_type,
+            })
+        else:
+            excluded.append({
+                'title': title,
+                'decision': 'drop',
+                'reason': '相对次要，优先级不足。',
+                'evidenceType': evidence_type,
+            })
+        if weak:
+            warnings.append({'title': title, 'warning': '缺少 DOI/arXiv 等稳定标识，建议人工复核。'})
 
-    for p in rejected_candidates:
-        rejected.append({
-            'title': p.get('title', ''),
-            'decision': 'drop',
-            'reason': 'low_relevance'
-        })
+    summary = {
+        'inputCount': len(papers),
+        'keepCount': len(included),
+        'dropCount': len(excluded),
+        'warningCount': len(warnings),
+        'coverage': {
+            'hasSurvey': any(i.get('evidenceType') == 'survey' for i in included),
+            'hasRecent': any((p.get('year') or 0) >= datetime.now().year - 2 for p in papers),
+            'hasCanonical': any(i.get('evidenceType') == 'canonical' for i in included),
+        }
+    }
 
-    survey_count = sum(1 for p in accepted if p.get('evidenceType') == 'survey')
-    method_count = sum(1 for p in accepted if p.get('evidenceType') == 'method')
-    recent_count = sum(1 for p in accepted if (p.get('year') or 0) >= (datetime.now().year - 2))
-    all_preprints = all((p.get('doi','') == '' and p.get('arxivId','')) or p.get('source') == 'research-papers' for p in accepted) if accepted else False
+    if not summary['coverage']['hasSurvey']:
+        warnings.append({'title': 'survey-gap', 'warning': '当前 shortlist 缺少综述类文献，建议触发 query reformulation。'})
+    if not summary['coverage']['hasRecent']:
+        warnings.append({'title': 'recent-gap', 'warning': '当前 shortlist 缺少近 2 年文献，建议补检索。'})
 
-    if len(accepted) < target:
-        warnings.append('core paper count below target')
-    if survey_count < 1:
-        warnings.append('survey count below minimum')
-    if method_count < 1:
-        warnings.append('method count below minimum')
-    if recent_count < 3:
-        warnings.append('recent paper count below minimum')
-    if all_preprints:
-        warnings.append('all candidates are preprints')
-
-    out = {
+    return {
         'topic': shortlist.get('topic', ''),
         'generatedAt': datetime.now().astimezone().isoformat(timespec='seconds'),
-        'selectionRules': {
-            'targetCoreCount': 8,
-            'minRecentYears': 3,
-            'allowPreprints': True,
-            'mustExplainExclusions': True,
-            'minSurveyCount': 1,
-            'minMethodCount': 1,
-            'minRecentCount': 3,
-            'requireCanonicalWhenAvailable': True,
-            'warnIfAllPreprints': True,
-        },
-        'accepted': [
-            {
-                'rank': i,
-                'title': p.get('title', ''),
-                'decision': 'keep',
-                'reason': p.get('relevanceNote', '') or 'high score',
-                'bucket': p.get('evidenceType', 'method')
-            }
-            for i, p in enumerate(accepted, 1)
-        ],
-        'rejected': rejected,
+        'summary': summary,
+        'included': included,
+        'excluded': excluded,
         'warnings': warnings,
     }
-    return out
 
 
 def main():
@@ -82,13 +81,11 @@ def main():
     out_json.write_text(json.dumps(screening, ensure_ascii=False, indent=2), encoding='utf-8')
     print(out_json)
     if args.out_md:
-        import subprocess
-        subprocess.run([
-            'python3',
-            str(Path(__file__).resolve().parent / 'render_reference_screening.py'),
+        run_python_script(
+            skill_script(REPO_ROOT, 'render_reference_screening.py'),
             '--input', str(out_json),
             '--out-md', args.out_md,
-        ], check=True)
+        )
 
 
 if __name__ == '__main__':
