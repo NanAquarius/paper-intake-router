@@ -2,9 +2,15 @@
 
 # paper-intake-router
 
-> 🧭 OpenClaw-first workflow core for turning paper requests into structured, evidence-aware, figure-aware, citation-consistent deliverables.
+![License](https://img.shields.io/badge/license-MIT-green)
+![OpenClaw-first](https://img.shields.io/badge/OpenClaw-first-4f46e5)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
+![Workflow](https://img.shields.io/badge/type-workflow%20engine-111827)
+
+> 🧭 *OpenClaw-first workflow core for turning paper requests into structured, evidence-aware, figure-aware, citation-consistent deliverables.*
 
 `paper-intake-router` is an **OpenClaw-oriented paper workflow Skill / engine**.
+
 It is built for academic work where text generation alone is not enough — the agent also needs workflow structure, source discipline, figure/table planning, and stable citation handling.
 
 ## ✨ Why this project exists
@@ -20,24 +26,7 @@ Much fewer can reliably handle the operational side of academic writing:
 - keep figure references, numbering, and final citations consistent
 - adapt the final output to a chosen template / citation rendering profile
 
-This project focuses on that missing layer.
-
-## 🗺 Workflow at a glance
-
-```mermaid
-flowchart LR
-    A[Intake request] --> B[Task sheet]
-    B --> C[Evidence and citation workflow]
-    B --> D[Figure / table planning]
-    C --> E[Writing evidence pack]
-    C --> F[Citation plan]
-    D --> G[Figure validation and autofix]
-    E --> H[Draft / structured writing]
-    F --> I[Unified citation layer]
-    G --> H
-    H --> I
-    I --> J[Template-aware final rendering]
-```
+*This project focuses on that missing layer.*
 
 ## 🔧 What it does
 
@@ -78,6 +67,23 @@ If you are using another environment, expect to adapt:
 - workspace/path conventions
 - upstream search and evidence backends
 - tool wiring and invocation glue
+
+## 🗺 Workflow at a glance
+
+```mermaid
+flowchart LR
+    A[Intake request] --> B[Task sheet]
+    B --> C[Evidence and citation workflow]
+    B --> D[Figure / table planning]
+    C --> E[Writing evidence pack]
+    C --> F[Citation plan]
+    D --> G[Figure validation and autofix]
+    E --> H[Draft / structured writing]
+    F --> I[Unified citation layer]
+    G --> H
+    H --> I
+    I --> J[Template-aware final rendering]
+```
 
 ## 🗂 Repository layout
 
@@ -143,7 +149,7 @@ Typical examples:
 - OpenAlex
 - Tavily / Exa / other search providers
 
-Recommendation: document clearly in your own deployment which upstream providers are required and which steps depend on them.
+*Recommendation:* document clearly in your own deployment which upstream providers are required and which steps depend on them.
 
 ## ⚡ Quick start
 
@@ -284,6 +290,12 @@ It does **not** guarantee:
 - bundled redistributable thesis / journal / conference PDF samples by default
 
 See `references/capability-boundaries.md` for the current operational boundaries.
+
+---
+
+⭐ *If this project helps, consider starring the repo.*
+
+🤝 *Issues and contributions are welcome.*
 
 ## License
 

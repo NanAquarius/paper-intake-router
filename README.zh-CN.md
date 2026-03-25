@@ -2,9 +2,15 @@
 
 # paper-intake-router
 
-> 🧭 OpenClaw 优先的论文工作流内核，用来把论文需求推进成结构化、证据感知、图表感知、引用一致的可交付产物。
+![License](https://img.shields.io/badge/license-MIT-green)
+![OpenClaw-first](https://img.shields.io/badge/OpenClaw-first-4f46e5)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)
+![Workflow](https://img.shields.io/badge/type-workflow%20engine-111827)
+
+> 🧭 *OpenClaw 优先的论文工作流内核，用来把论文需求推进成结构化、证据感知、图表感知、引用一致的可交付产物。*
 
 `paper-intake-router` 是一个 **面向 OpenClaw 的论文工作流 Skill / engine**。
+
 它的重点不是“帮你多写几段字”，而是把学术写作里真正容易失控的那一层流程稳定下来。
 
 ## ✨ 为什么做这个项目
@@ -18,24 +24,7 @@
 - 让图表编号、正文引用、终稿引用层保持一致
 - 让最终输出跟模板 / citation rendering profile 对齐
 
-这个项目重点补的，就是这层“论文工作流引擎”。
-
-## 🗺 工作流总览
-
-```mermaid
-flowchart LR
-    A[论文需求 intake] --> B[task sheet]
-    B --> C[文献与引用工作流]
-    B --> D[图表规划]
-    C --> E[writing evidence pack]
-    C --> F[citation plan]
-    D --> G[图表校验与自动修正]
-    E --> H[草稿 / 结构化写作]
-    F --> I[统一引用层]
-    G --> H
-    H --> I
-    I --> J[模板感知的终稿渲染]
-```
+*这个项目重点补的，就是这层“论文工作流引擎”。*
 
 ## 🔧 它能做什么
 
@@ -76,6 +65,23 @@ flowchart LR
 - 工作区 / 路径约定
 - 上游检索与证据后端
 - 工具调用和命令编排方式
+
+## 🗺 工作流总览
+
+```mermaid
+flowchart LR
+    A[论文需求 intake] --> B[task sheet]
+    B --> C[文献与引用工作流]
+    B --> D[图表规划]
+    C --> E[writing evidence pack]
+    C --> F[citation plan]
+    D --> G[图表校验与自动修正]
+    E --> H[草稿 / 结构化写作]
+    F --> I[统一引用层]
+    G --> H
+    H --> I
+    I --> J[模板感知的终稿渲染]
+```
 
 ## 🗂 仓库结构
 
@@ -139,12 +145,7 @@ pip install -r requirements-minimal.txt
 - OpenAlex
 - Tavily / Exa / 其他检索服务
 
-建议在你自己的部署文档里明确写清楚：
-
-- 用了哪个上游提供方
-- 是否要求 API Key
-- 应该去哪里申请
-- 哪些步骤依赖这些外部凭据
+*建议在你自己的部署文档里明确写清楚：用了哪个上游提供方、是否要求 API Key、应该去哪里申请，以及哪些步骤依赖这些外部凭据。*
 
 ## ⚡ 快速开始
 
@@ -287,6 +288,12 @@ python3 scripts/render_final_citations.py \
 当前边界见：
 
 - `references/capability-boundaries.md`
+
+---
+
+⭐ *如果这个项目对你有帮助，欢迎点一个 Star。*
+
+🤝 *也欢迎 issue、讨论和贡献。*
 
 ## License
 
