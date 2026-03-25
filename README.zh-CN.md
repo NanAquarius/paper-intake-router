@@ -2,52 +2,63 @@
 
 # paper-intake-router
 
-> 一个 **OpenClaw 优先** 的论文工作流内核，把论文需求推进成结构化、证据感知、图表感知、引用一致的可交付产物。
+> OpenClaw 优先的论文工作流内核，用来把论文需求推进成结构化、证据感知、图表感知、引用一致的可交付产物。
 
-`paper-intake-router` 首先是为 **OpenClaw Skill 生态** 设计的，不是单纯的“论文文本生成器”，而是一个更偏工作流层的内核。
-它适合那些不满足于“生成几段文字”，而希望代理真正管理整条论文生产流程的场景。
+`paper-intake-router` 是一个 **面向 OpenClaw 的论文工作流 Skill / engine**。
+它的重点不是“帮你多写几段字”，而是把学术写作里真正容易失控的那一层流程稳定下来。
 
-## 兼容性说明
+## 为什么做这个项目
 
-这个仓库的默认定位是 **OpenClaw Skill**。
+很多 AI 写作工具能生成段落，但在论文任务里，真正难的是这些环节：
 
-它在其它 agent / CLI 环境里——例如 **Claude Code**、**OpenCode** 或类似 coding-agent runtime——**不保证开箱即用**。如果你要迁移到这些环境，通常需要自行调整：
+- 把模糊需求 intake 成结构化任务单
+- 分清原始材料和弱二手材料
+- 在写作前组织 evidence 与 citation
+- 在正文写完前先把图表规划好
+- 让图表编号、正文引用、终稿引用层保持一致
+- 让最终输出跟模板 / citation rendering profile 对齐
 
-- 运行时假设
-- 工作区路径约定
-- 文献检索 / 证据后端接法
-- 工具调用与命令编排方式
+这个项目重点补的，就是这层“论文工作流引擎”。
 
-所以更准确地说：
+## 它能做什么
 
-- 对 OpenClaw：它是 Skill / workflow engine
-- 对其它 CLI：它更像一个可移植的论文工作流内核，需要你自己做接线与适配
+### Intake 和任务路由
+- 把需求归一化成 task sheet
+- 推断论文类型、语言、风格、交付模式等默认值
+- 在没有官方模板时选择默认版式模板
 
-它重点处理这些问题：
+### 文献与引用工作流
+- reference shortlist
+- screening 和 retry 检索链
+- reference pack
+- writing evidence pack
+- 按章节 / claim type 组织 citation plan
 
-- 把原始论文需求归一化成结构化任务单
-- 组织文献、证据包和引用计划
-- 在写正文前先规划图表
-- 保持图表编号、正文引用和引用渲染的一致性
-- 在不同模板和风格下稳定输出终稿引用格式
+### 图表工作流
+- 在写作前先生成 figure/table plan
+- 从模板逻辑推导编号规则
+- 生成代码 / CSV / 产物脚手架
+- 校验图表引用与编号一致性
+- 自动修正图表说明句与引用模式
 
-## 核心亮点
+### 统一引用层
+- 普通正文段和图表说明句共用同一套 citation layer
+- 支持 `support-note`、`inline-marker`、`internal-anchor`
+- 支持 GB/T 7714 与 APA 风格渲染
+- 支持模板感知的 citation rendering profile
 
-- **Intake → task sheet** 归一化
-- **reference shortlist / screening / retry / reference pack** 工作流
-- **writing evidence pack + citation plan** 生成
-- **图表规划、校验与自动修正**
-- **普通正文段与图表说明句统一走 citation layer**
-- **模板感知的终稿引用渲染**
+## OpenClaw 优先兼容说明
 
-## 适合谁用
+这个仓库首先是为 **OpenClaw** 生态设计的。
 
-这个项目适合：
+它也可以被迁移到其它 agent / CLI 环境，比如 **Claude Code**、**OpenCode** 或类似 coding-agent runtime，但**不保证开箱即用**。
 
-- academic writing agents
-- thesis workflow assistants
-- paper-production pipelines
-- citation / figure automation systems
+如果你要迁移到这些环境，通常需要自己调整：
+
+- runtime 假设
+- 工作区 / 路径约定
+- 上游检索与证据后端
+- 工具调用和命令编排方式
 
 ## 仓库结构
 
@@ -63,23 +74,7 @@ paper-intake-router/
 └── LICENSE
 ```
 
-## 运行要求
-
-### 基础环境
-
-- Python 3.10+
-- Linux / macOS / WSL 或 Windows PowerShell
-
-### 可选依赖
-
-按你使用的工作流不同，可能还需要：
-
-- `quarto`
-- `pandoc`
-- `xelatex` 或其它 LaTeX 工具链
-- `matplotlib`（用于本地图表脚手架渲染）
-
-## 基础环境准备
+## 安装
 
 ### Linux / macOS / WSL
 
@@ -100,9 +95,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
 .\.venv\Scripts\Activate.ps1
 ```
 
-### 手动安装（跨平台）
-
-如果你不想用安装脚本，也可以手动安装：
+### 手动安装
 
 ```bash
 python3 -m venv .venv
@@ -110,73 +103,31 @@ source .venv/bin/activate
 pip install -r requirements-minimal.txt
 ```
 
-Windows 下对应：
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements-minimal.txt
-```
-
-### 安装脚本会做什么
-
-安装脚本默认只做最小安装：
-
-- 创建本地虚拟环境
-- 升级 `pip`
-- 安装 `requirements-minimal.txt`
-
-这样可以保证本地的规划 / 校验 / 引用渲染链可以直接跑起来。
-
-如果你还需要更完整的 PDF / 文档渲染能力，请额外安装 `quarto`、`pandoc`、LaTeX 工具链等可选依赖。
-
 ## API Key / 外部服务说明
 
-这个仓库里的**本地核心流程**本身不强制要求 API Key。
-
-也就是说，下面这些环节可以本地直接跑：
+本地核心链本身**不强制要求 API Key**。例如这些步骤可以纯本地运行：
 
 - task sheet 生成
 - 图表规划
-- 图表自动修正
+- 本地图表校验与自动修正
 - 引用渲染
 - smoke test
 
-但如果你要启用完整论文工作流里的以下环节，通常**建议配置外部 API / 上游服务**：
+但如果你要跑完整的文献检索 / evidence-building 流水线，通常会受益于或依赖外部服务。常见例子包括：
 
-- 文献检索
-- reference shortlist 生成
-- evidence pack 构建
-- 外部学术元数据拉取
-- 大规模文档解析 / 检索增强
-
-### 建议配置的外部服务
-
-例如：
-
-- **Semantic Scholar API**
+- Semantic Scholar API
   - 官方入口：<https://www.semanticscholar.org/product/api>
-  - 教程 / 认证说明：<https://www.semanticscholar.org/product/api/tutorial>
-  - API 文档：<https://api.semanticscholar.org/api-docs/>
-  - 如果你的工作流依赖 Semantic Scholar 做检索或元数据增强，建议提醒使用者先按官方文档申请并配置自己的 API 访问能力
+  - 教程：<https://www.semanticscholar.org/product/api/tutorial>
+  - 文档：<https://api.semanticscholar.org/api-docs/>
+- OpenAlex
+- Tavily / Exa / 其他检索服务
 
-- **OpenAlex**
-  - 适合论文元数据和学术图谱查询
-  - 某些用法不一定需要私有 key，但仍然应在部署说明中写清楚你依赖的是哪套后端
+建议在你自己的部署文档里明确写清楚：
 
-- **Tavily / Exa / 其他搜索服务**
-  - 当工作流依赖外部网页搜索、检索增强或证据补全时，建议配置
-
-### 对使用者和维护者的建议
-
-如果你的部署打开了文献检索或 evidence-building 阶段，请在文档里明确写清楚：
-
-- 使用了哪个提供方
+- 用了哪个上游提供方
 - 是否要求 API Key
-- Key 应该去哪里申请
-- 哪些工作流步骤依赖这个外部凭据
-
-也就是说：**本地核心链不需要 API Key，但生产化的检索 / 证据工作流通常需要。**
+- 应该去哪里申请
+- 哪些步骤依赖这些外部凭据
 
 ## 快速开始
 
@@ -196,7 +147,7 @@ python3 scripts/build_figure_table_plan.py \
   --out-json /tmp/figure-plan.json
 ```
 
-### 3）把图表说明句修成 internal anchor 模式
+### 3）把图表说明句转成 internal anchor
 
 ```bash
 python3 scripts/autofix_figure_table_refs.py \
@@ -218,9 +169,7 @@ python3 scripts/render_final_citations.py \
 
 ## 更详细的使用方法
 
-### A. Intake 归一化
-
-如果你已经有一个规范化或半规范化的论文需求 JSON，可以直接用：
+### 生成标准 task sheet
 
 ```bash
 python3 scripts/build_task_sheet.py \
@@ -229,16 +178,7 @@ python3 scripts/build_task_sheet.py \
   --out-md /tmp/task.md
 ```
 
-这一层会决定：
-
-- 论文类型
-- 学位层级
-- 主题
-- 引用风格
-- 目标字数
-- 默认版式模板选择
-
-### B. 图表规划
+### 生成图表规划
 
 ```bash
 python3 scripts/build_figure_table_plan.py \
@@ -252,12 +192,7 @@ python3 scripts/build_figure_table_plan.py \
 - `--evidence-pack`
 - `--citation-plan`
 
-提供这些输入后，图表规划会变成：
-
-- evidence-aware
-- citation-aware
-
-### C. 图表代码脚手架
+### 生成图表代码脚手架
 
 ```bash
 python3 scripts/generate_figure_table_codegen.py \
@@ -265,13 +200,7 @@ python3 scripts/generate_figure_table_codegen.py \
   --base-dir /tmp/paper-artifacts
 ```
 
-这一层会生成：
-
-- 代码脚手架
-- 占位 CSV 数据
-- 图表 / 表格输出路径
-
-### D. 图表引用校验
+### 校验图表引用
 
 ```bash
 python3 scripts/validate_figure_table_refs.py \
@@ -281,61 +210,20 @@ python3 scripts/validate_figure_table_refs.py \
   --out-md /tmp/figure-validation.md
 ```
 
-它会检查：
-
-- 必需图表是否在正文出现
-- 正文是否引用了计划外的图表
-- 编号是否连续
-- 图表标签是否重复
-
-### E. 图表自动修正模式
-
-`autofix_figure_table_refs.py` 支持三种引用输出模式：
-
-- `support-note`
-  - 更适合草稿阶段
-  - 会生成“可结合 xxx 进一步支撑”这类说明
-
-- `inline-marker`
-  - 更适合半终稿阶段
-  - 会直接写可见 marker，例如 `[2]`
-
-- `internal-anchor`
-  - 最适合完整自动化链
-  - 会写成 `[CITE:baseline comparison|lee2024benchmark]`
-  - 让图表说明句和普通正文共用同一套最终引用渲染链
-
-示例：
-
-```bash
-python3 scripts/autofix_figure_table_refs.py \
-  --plan /tmp/figure-plan.json \
-  --draft /tmp/draft.md \
-  --citation-mode internal-anchor \
-  --out /tmp/fixed.md \
-  --report /tmp/autofix-report.json
-```
-
-### F. 终稿引用渲染
+### 按 profile 渲染最终引用
 
 ```bash
 python3 scripts/render_final_citations.py \
   --draft /tmp/fixed.md \
   --reference-pack examples/reference-pack.json \
+  --citation-profile-json /tmp/profile.json \
   --style 'APA' \
   --out /tmp/final.md
 ```
 
-可选输入：
+## 典型产物
 
-- `--citation-plan`
-- `--citation-profile-json`
-
-如果你的版式模板里定义了 citation rendering profile，就应该把它传进来，这样最终引用层才能与模板风格保持一致。
-
-## 典型输出产物
-
-根据你跑的链路不同，项目可能会生成这些中间/最终文件：
+根据你走的链路不同，项目会生成这些中间 / 最终文件：
 
 - `task.json` / `task.md`
 - `references-shortlist.json` / `.md`
@@ -348,39 +236,38 @@ python3 scripts/render_final_citations.py \
 - fixed draft
 - final rendered draft
 
-## 示例
+## 示例与验活
 
-仓库里附带了最小示例：
+仓库附带的最小示例：
 
 - `examples/intake.json`
 - `examples/draft.md`
 - `examples/reference-pack.json`
-- `examples/layout-samples/README.md`（说明如何自行构建本地排版样张库）
+- `examples/layout-samples/README.md`
 
-如果你想快速验活，可以直接运行：
+最小验活入口：
 
 - `scripts/smoke_test_pipeline.py`
 
-## 这个项目是什么
+## 它是什么
 
 更准确地说，它是：
 
 - **论文工作流引擎**
 - **格式与引用稳定器**
-- **面向智能代理的 draft-to-deliverable orchestration layer**
+- **面向 Agent 的 draft-to-deliverable orchestration layer**
 
-## 这个项目不是什么
+## 它不是什么
 
 它**不保证**：
-
-- 默认就附带可再分发的学位论文 / 期刊 / 会议 PDF 排版样张
 
 - 在没有官方模板原件时完全符合学校 / 期刊规范
 - 实验结果的真实性
 - 无需人工复核即可直接投稿 / 送审
-- 自动发明可信数据、结果或文献
+- 自动发明可信数据、结果或参考文献
+- 默认附带可再分发的论文 PDF 排版样张
 
-当前能力边界见：
+当前边界见：
 
 - `references/capability-boundaries.md`
 
